@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "328819608249",
+    "project_id": "foodrecipeapplication",
+    "storage_bucket": "foodrecipeapplication.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:328819608249:android:f2697012023f1b85de2968",
+        "android_client_info": {
+          "package_name": "com.example.foodrecipeapplicaiton"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuiyeyA4VeaJRxXlgQCG5D8Gg5oya6eYA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
