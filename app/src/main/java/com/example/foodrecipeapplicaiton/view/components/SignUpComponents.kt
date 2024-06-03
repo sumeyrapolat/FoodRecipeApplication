@@ -149,7 +149,7 @@ fun UserEmailTextField() {
 }
 
 @Composable
-fun ActionButton() {
+fun SignUpButton() {
     Button(
         onClick = {
             //println("Credentials: Email = $email , Password = $password")
@@ -162,4 +162,17 @@ fun ActionButton() {
         Text(text = "Sign Up", fontSize = 16.sp)
     }
 }
-
+@Composable
+fun LoginButton() {
+    Button(
+        onClick = {
+            //println("Credentials: Email = $email , Password = $password")
+        },
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.Black, // Arka plan rengi
+            contentColor = Color.White // Metin rengi
+        )
+    ) {
+        Text(text = "Login", fontSize = 16.sp)
+    }
+}
