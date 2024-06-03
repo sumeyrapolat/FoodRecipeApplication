@@ -3,6 +3,7 @@ package com.example.foodrecipeapplicaiton.view
 import androidx.compose.runtime.Composable
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,7 +27,7 @@ import com.example.foodrecipeapplicaiton.view.components.UserNameTextField
 
 @Composable
 fun SignUpScreen() {
-
+    val darkTheme = isSystemInDarkTheme()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -39,7 +40,8 @@ fun SignUpScreen() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ligthicon),
+                painter = painterResource(id =
+                if (darkTheme) R.drawable.darkicon else R.drawable.ligthicon),
                 contentDescription = "logo",
                 modifier = Modifier.size(220.dp)
             )
