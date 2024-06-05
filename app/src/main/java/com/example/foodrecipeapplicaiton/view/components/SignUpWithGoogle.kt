@@ -133,7 +133,7 @@ fun SignUpWithGoogle(
 
         Icon(
             modifier = Modifier
-                .width(140.dp)
+                .width(120.dp)
                 .clickable {
                     clicked = !clicked
                 },

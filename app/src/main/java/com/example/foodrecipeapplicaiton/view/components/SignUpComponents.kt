@@ -60,7 +60,7 @@ fun UserNameTextField() {
         singleLine = true,      // giriş bilgilerinin tek bir satırda kalmasını
         maxLines = 1,
         onValueChange = { username = it },
-        label = { Text(text = "Password", color = if(darkTheme) LabelColorDark else LabelColor) },
+        label = { Text(text = "User Name", color = if(darkTheme) LabelColorDark else LabelColor) },
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Text,
             imeAction = ImeAction.Send
