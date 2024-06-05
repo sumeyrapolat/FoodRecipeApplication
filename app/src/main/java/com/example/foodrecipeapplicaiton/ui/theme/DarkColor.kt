@@ -18,3 +18,7 @@ val HintColorDark = Color(0xFF444444)
 val BackgroundColorDark = Color(0xFF000000)
 val ButtonColorDark = Color(0xFFFFFFFF)
 val ButtonTextColorDark = Color(0xFF000000)
+
+val TopAppBarColorDark = Color(0xFF000000)
+val TopBarTextColorDark = Color(0xFFFFFFFF)
+

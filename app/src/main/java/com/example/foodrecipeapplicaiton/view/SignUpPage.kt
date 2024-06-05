@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,7 +32,7 @@ import com.example.foodrecipeapplicaiton.view.components.UserEmailTextField
 import com.example.foodrecipeapplicaiton.view.components.UserNameTextField
 
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(paddingValues: PaddingValues) {
     val darkTheme = isSystemInDarkTheme()
     Column(
         modifier = Modifier
@@ -99,5 +100,5 @@ fun SignUpScreen() {
 @Preview
 @Composable
 private fun SignUpScreenPreview() {
-    SignUpScreen()
+    SignUpScreen(paddingValues = PaddingValues(1.dp))
 }

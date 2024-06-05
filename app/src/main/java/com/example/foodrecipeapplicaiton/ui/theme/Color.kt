@@ -24,3 +24,8 @@ val HintColor = Color(0xFFCCCCCC)
 val BackgroundColor = Color(0xFFFFFFFF)
 val ButtonColor = Color(0xFF000000)
 val ButtonTextColor = Color(0xFFFFFFFF)
+
+val TopAppBarColor = Color(0xFFFFFFFF)
+val TopBarTextColor = Color(0xFF000000)
+
+
