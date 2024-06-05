@@ -170,8 +170,8 @@ fun SignUpButton(onClick: () -> Unit) {
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (darkTheme) ButtonColorDark else ButtonColor, // Background color
-            contentColor = if (darkTheme) ButtonTextColorDark else ButtonTextColor // Text color
+            containerColor = if (darkTheme) ButtonColorDark else ButtonColor, // Arka plan rengi
+            contentColor = if (darkTheme) ButtonTextColorDark else ButtonTextColor // Metin rengi
         )
     ) {
         Text(
@@ -182,15 +182,12 @@ fun SignUpButton(onClick: () -> Unit) {
     }
 }
 
-
 @Composable
-fun LoginButton() {
+fun LoginButton(onClick: () -> Unit) {
     val darkTheme = isSystemInDarkTheme()
 
     Button(
-        onClick = {
-            //println("Credentials: Email = $email , Password = $password")
-        },
+        onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor =  if(darkTheme) ButtonColorDark else ButtonColor, // Arka plan rengi
             contentColor =  if(darkTheme)  ButtonTextColorDark else ButtonTextColor // Metin rengi

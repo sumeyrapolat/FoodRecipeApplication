@@ -24,24 +24,32 @@ import com.example.foodrecipeapplicaiton.ui.theme.TopAppBarColor
 import com.example.foodrecipeapplicaiton.ui.theme.TopAppBarColorDark
 import com.example.foodrecipeapplicaiton.ui.theme.TopBarTextColor
 import com.example.foodrecipeapplicaiton.ui.theme.TopBarTextColorDark
+import com.example.foodrecipeapplicaiton.view.routes.Routes
+import com.example.foodrecipeapplicaiton.view.screens.LoginScreen
+import com.example.foodrecipeapplicaiton.view.screens.MainScreen
 import com.example.foodrecipeapplicaiton.view.screens.SignUpScreen
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             val isSystemInDarkTheme = isSystemInDarkTheme()
-
-            if (isSystemInDarkTheme) {
-                FoodRecipeApplicaitonTheme(darkTheme = true) {
-                    MainContent()
-                }
-            } else {
-                FoodRecipeApplicaitonTheme(darkTheme = false) {
-                    MainContent()
+            FoodRecipeApplicaitonTheme(darkTheme = isSystemInDarkTheme) {
+                val navController = rememberNavController()
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    NavHost(navController = navController, startDestination = Routes.LOGIN) {
+                        composable(Routes.LOGIN) { LoginScreen(navController) }
+                        composable(Routes.SIGN_UP) { SignUpScreen(navController) }
+                        composable(Routes.MAIN) { MainScreen() }
+                    }
                 }
             }
-
         }
     }
 }
@@ -49,6 +57,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun MainContent() {
     val darkTheme = isSystemInDarkTheme()
+    val navController = rememberNavController()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -59,7 +68,7 @@ private fun MainContent() {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(color = if(darkTheme) TopAppBarColorDark else TopAppBarColor)
+                        .background(color = if (darkTheme) TopAppBarColorDark else TopAppBarColor)
                         .height(60.dp)
                         .padding(horizontal = 25.dp),
                     contentAlignment = Alignment.Center
@@ -67,11 +76,17 @@ private fun MainContent() {
                     Text(
                         text = "˗ˏˋ ★ ˎˊ˗",
                         fontSize = 20.sp,
-                        color = if(darkTheme) TopBarTextColorDark else TopBarTextColor
+                        color = if (darkTheme) TopBarTextColorDark else TopBarTextColor
                     )
                 }
             }
-        ) {
-            SignUpScreen(paddingValues = it)        }
+        ) { paddingValues ->
+            NavHost(navController = navController, startDestination = Routes.SIGN_UP, Modifier.padding(paddingValues)) {
+                composable(Routes.SIGN_UP) { SignUpScreen(navController = navController)}
+                composable(Routes.LOGIN) { LoginScreen(navController) }
+                composable(Routes.MAIN) { MainScreen() }
+            }
+        }
     }
 }
+

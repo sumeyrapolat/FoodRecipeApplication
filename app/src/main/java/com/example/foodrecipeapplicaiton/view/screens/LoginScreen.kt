@@ -29,10 +29,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.foodrecipeapplicaiton.R
-import com.example.foodrecipeapplicaiton.loginviewmodel.LoginViewModel
+import com.example.foodrecipeapplicaiton.viewmodel.LoginViewModel
 import com.example.foodrecipeapplicaiton.view.components.LoginButton
 import com.example.foodrecipeapplicaiton.view.components.PasswordTextField
-import com.example.foodrecipeapplicaiton.view.components.UserEmailTextField
 import com.example.foodrecipeapplicaiton.view.components.UserNameTextField
 import com.example.foodrecipeapplicaiton.view.routes.Routes
 

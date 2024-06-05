@@ -1,4 +1,4 @@
-package com.example.foodrecipeapplicaiton.loginviewmodel
+package com.example.foodrecipeapplicaiton.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

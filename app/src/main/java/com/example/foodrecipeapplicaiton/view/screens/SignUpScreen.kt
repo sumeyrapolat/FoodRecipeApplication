@@ -19,7 +19,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.foodrecipeapplicaiton.R
-import com.example.foodrecipeapplicaiton.signupviewmodel.SignUpViewModel
+import com.example.foodrecipeapplicaiton.viewmodel.SignUpViewModel
 import com.example.foodrecipeapplicaiton.view.components.PasswordTextField
 import com.example.foodrecipeapplicaiton.view.components.SignUpButton
 import com.example.foodrecipeapplicaiton.view.components.SignUpWithGoogle
