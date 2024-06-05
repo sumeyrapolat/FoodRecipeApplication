@@ -1,5 +1,6 @@
 package com.example.foodrecipeapplicaiton.view.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -24,18 +25,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.foodrecipeapplicaiton.R
+import com.example.foodrecipeapplicaiton.loginviewmodel.LoginViewModel
 import com.example.foodrecipeapplicaiton.view.components.LoginButton
 import com.example.foodrecipeapplicaiton.view.components.PasswordTextField
 import com.example.foodrecipeapplicaiton.view.components.UserEmailTextField
 import com.example.foodrecipeapplicaiton.view.components.UserNameTextField
+import com.example.foodrecipeapplicaiton.view.routes.Routes
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel = viewModel()) {
     val darkTheme = isSystemInDarkTheme()
 
     var userName by remember { mutableStateOf("") }
-    var userEmail by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
 
     Column(
         modifier = Modifier
@@ -62,16 +69,28 @@ fun LoginScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 UserNameTextField(onValueChange = { userName = it })
-                UserEmailTextField(onValueChange = { userEmail = it })
 
-
-                //PasswordTextField()
+                PasswordTextField(onValueChange = { password = it })
             }
         }
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        LoginButton()
+        LoginButton(
+
+            onClick = {
+                loginViewModel.loginUser(
+                    username = userName,
+                    password = password,
+                    onSuccess = {
+                        Log.i("Login", "Success")
+                        navController.navigate("main")
+                    },
+                    onFailure = { Log.e("Login", "Error: ${it.message}") }
+                )
+            }
+
+        )
 
         Spacer(modifier = Modifier.height(30.dp))
 
@@ -79,7 +98,7 @@ fun LoginScreen() {
             modifier = Modifier
                 .padding(20.dp)
                 .clickable {
-                    //onClick()
+                   navController.navigate(Routes.SIGN_UP)
                 },
             text = "Go To Sign Up Screen",
             color = if (darkTheme) Color.White else Color.Black,
@@ -93,5 +112,6 @@ fun LoginScreen() {
 @Preview
 @Composable
 private fun LoginScreenPreview() {
-    LoginScreen()
+    val navController = rememberNavController()
+    LoginScreen(navController)
 }

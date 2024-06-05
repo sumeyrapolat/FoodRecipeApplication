@@ -16,6 +16,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.foodrecipeapplicaiton.R
 import com.example.foodrecipeapplicaiton.signupviewmodel.SignUpViewModel
 import com.example.foodrecipeapplicaiton.view.components.PasswordTextField
@@ -23,8 +25,11 @@ import com.example.foodrecipeapplicaiton.view.components.SignUpButton
 import com.example.foodrecipeapplicaiton.view.components.SignUpWithGoogle
 import com.example.foodrecipeapplicaiton.view.components.UserEmailTextField
 import com.example.foodrecipeapplicaiton.view.components.UserNameTextField
+import com.example.foodrecipeapplicaiton.view.routes.Routes
+
+
 @Composable
-fun SignUpScreen(paddingValues: PaddingValues, signUpViewModel: SignUpViewModel = viewModel()) {
+fun SignUpScreen(navController: NavController, signUpViewModel: SignUpViewModel = viewModel()) {
     val darkTheme = isSystemInDarkTheme()
 
     var userName by remember { mutableStateOf("") }
@@ -55,9 +60,7 @@ fun SignUpScreen(paddingValues: PaddingValues, signUpViewModel: SignUpViewModel 
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 UserNameTextField(onValueChange = { userName = it })
-
                 UserEmailTextField(onValueChange = { userEmail = it })
-
                 PasswordTextField(onValueChange = { password = it })
             }
         }
@@ -68,8 +71,12 @@ fun SignUpScreen(paddingValues: PaddingValues, signUpViewModel: SignUpViewModel 
             onClick = {
                 signUpViewModel.signUpUser(
                     email = userEmail,
+                    username = userName,
                     password = password,
-                    onSuccess = { Log.i("SignUp", "Success") },
+                    onSuccess = {
+                        Log.i("SignUp", "Success")
+                        navController.navigate("main")
+                    },
                     onFailure = { Log.e("SignUp", "Error: ${it.message}") }
                 )
             }
@@ -90,7 +97,7 @@ fun SignUpScreen(paddingValues: PaddingValues, signUpViewModel: SignUpViewModel 
             modifier = Modifier
                 .padding(20.dp)
                 .clickable {
-                    // onClick()
+                    navController.navigate(Routes.LOGIN)
                 },
             text = "I Have Already an Account",
             color = if (darkTheme) Color.White else Color.Black,
@@ -100,8 +107,11 @@ fun SignUpScreen(paddingValues: PaddingValues, signUpViewModel: SignUpViewModel 
     }
 }
 
+
+
 @Preview
 @Composable
 private fun SignUpScreenPreview() {
-    SignUpScreen(paddingValues = PaddingValues(1.dp))
+    val navController = rememberNavController()
+    SignUpScreen(navController = navController,)
 }
