@@ -1,4 +1,4 @@
-package com.example.foodrecipeapplicaiton.view
+package com.example.foodrecipeapplicaiton.view.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
