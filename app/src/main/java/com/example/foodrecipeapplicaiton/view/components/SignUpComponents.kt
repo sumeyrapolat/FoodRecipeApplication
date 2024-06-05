@@ -42,9 +42,9 @@ import com.example.foodrecipeapplicaiton.ui.theme.OutlinedTextFieldColorDark
 import com.example.foodrecipeapplicaiton.ui.theme.TextColor
 import com.example.foodrecipeapplicaiton.ui.theme.TextColorDark
 
-@Composable
-fun UserNameTextField() {
 
+@Composable
+fun UserNameTextField(onValueChange: (String) -> Unit) {
     var username by remember { mutableStateOf("") }
     val darkTheme = isSystemInDarkTheme()
 
@@ -52,21 +52,23 @@ fun UserNameTextField() {
         value = username,
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = if(darkTheme) HintColorDark else HintColor,
-            unfocusedBorderColor =  if(darkTheme) OutlinedTextFieldColorDark else OutlinedTextFieldColor,
-            focusedLabelColor =  if(darkTheme) LabelColorDark else LabelColor,
-            unfocusedLabelColor =  if(darkTheme) HintColorDark else HintColor,
-            focusedContainerColor =  if(darkTheme) BackgroundColorDark else BackgroundColor,
+            unfocusedBorderColor = if(darkTheme) OutlinedTextFieldColorDark else OutlinedTextFieldColor,
+            focusedLabelColor = if(darkTheme) LabelColorDark else LabelColor,
+            unfocusedLabelColor = if(darkTheme) HintColorDark else HintColor,
+            focusedContainerColor = if(darkTheme) BackgroundColorDark else BackgroundColor,
             unfocusedContainerColor = if(darkTheme) BackgroundColorDark else BackgroundColor
         ),
-        singleLine = true,      // giriş bilgilerinin tek bir satırda kalmasını
+        singleLine = true,
         maxLines = 1,
-        onValueChange = { username = it },
+        onValueChange = {
+            username = it
+            onValueChange(it)
+        },
         label = { Text(text = "User Name", color = if(darkTheme) LabelColorDark else LabelColor) },
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Text,
             imeAction = ImeAction.Send
         ),
-
         keyboardActions = KeyboardActions(
             onSearch = {
                 Log.i("ImeAction", "clicked")
@@ -76,37 +78,67 @@ fun UserNameTextField() {
 }
 
 @Composable
-fun PasswordTextField() {
+fun UserEmailTextField(onValueChange: (String) -> Unit) {
+    var email by remember { mutableStateOf("") }
     val darkTheme = isSystemInDarkTheme()
 
+    OutlinedTextField(
+        value = email,
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = if(darkTheme) HintColorDark else HintColor,
+            unfocusedBorderColor = if(darkTheme) OutlinedTextFieldColorDark else OutlinedTextFieldColor,
+            focusedLabelColor = if(darkTheme) LabelColorDark else LabelColor,
+            unfocusedLabelColor = if(darkTheme) HintColorDark else HintColor,
+            focusedContainerColor = if(darkTheme) BackgroundColorDark else BackgroundColor,
+            unfocusedContainerColor = if(darkTheme) BackgroundColorDark else BackgroundColor
+        ),
+        singleLine = true,
+        maxLines = 1,
+        onValueChange = {
+            email = it
+            onValueChange(it)
+        },
+        label = { Text(text = "Email Address", color = if(darkTheme) LabelColorDark else LabelColor) },
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Email,
+            imeAction = ImeAction.Search
+        ),
+        keyboardActions = KeyboardActions(
+            onSearch = {
+                Log.i("ImeAction", "clicked")
+            }
+        )
+    )
+}
 
+@Composable
+fun PasswordTextField(onValueChange: (String) -> Unit) {
     var password by remember { mutableStateOf("") }
     var passwordVisibility by rememberSaveable { mutableStateOf(false) }
-    val icon = if(passwordVisibility){
+    val darkTheme = isSystemInDarkTheme()
+    val icon = if (passwordVisibility) {
         painterResource(id = R.drawable.outline_visibility_24)
-    }else {
+    } else {
         painterResource(id = R.drawable.outline_visibility_off_24)
     }
-
 
     OutlinedTextField(
         value = password,
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = if(darkTheme) HintColorDark else HintColor,
-            unfocusedBorderColor =  if(darkTheme) OutlinedTextFieldColorDark else OutlinedTextFieldColor,
-            focusedLabelColor =  if(darkTheme) LabelColorDark else LabelColor,
-            unfocusedLabelColor =  if(darkTheme) HintColorDark else HintColor,
-            focusedContainerColor =  if(darkTheme) BackgroundColorDark else BackgroundColor,
+            unfocusedBorderColor = if(darkTheme) OutlinedTextFieldColorDark else OutlinedTextFieldColor,
+            focusedLabelColor = if(darkTheme) LabelColorDark else LabelColor,
+            unfocusedLabelColor = if(darkTheme) HintColorDark else HintColor,
+            focusedContainerColor = if(darkTheme) BackgroundColorDark else BackgroundColor,
             unfocusedContainerColor = if(darkTheme) BackgroundColorDark else BackgroundColor
         ),
-        singleLine = true,      // giriş bilgilerinin tek bir satırda kalmasını
+        singleLine = true,
         maxLines = 1,
         onValueChange = {
             password = it
+            onValueChange(it)
         },
-        label = {
-            Text(text = "Password", color = if(darkTheme) LabelColorDark else LabelColor)
-        },
+        label = { Text(text = "Password", color = if(darkTheme) LabelColorDark else LabelColor) },
         trailingIcon = {
             IconButton(onClick = {
                 passwordVisibility = !passwordVisibility
@@ -121,71 +153,35 @@ fun PasswordTextField() {
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password,
             imeAction = ImeAction.Done
-
         ),
         keyboardActions = KeyboardActions(
             onDone = {
                 Log.i("ImeAction", "clicked")
-
             }
         ),
-        visualTransformation = if(passwordVisibility) VisualTransformation.None
-        else PasswordVisualTransformation()
-
-
+        visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation()
     )
 }
 
 @Composable
-fun UserEmailTextField() {
-    val darkTheme = isSystemInDarkTheme()
-    var email by remember { mutableStateOf("") }
-
-    OutlinedTextField(
-        value = email,
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = if(darkTheme) HintColorDark else HintColor,
-            unfocusedBorderColor =  if(darkTheme) OutlinedTextFieldColorDark else OutlinedTextFieldColor,
-            focusedLabelColor =  if(darkTheme) LabelColorDark else LabelColor,
-            unfocusedLabelColor =  if(darkTheme) HintColorDark else HintColor,
-            focusedContainerColor =  if(darkTheme) BackgroundColorDark else BackgroundColor,
-            unfocusedContainerColor = if(darkTheme) BackgroundColorDark else BackgroundColor
-        ),
-        singleLine = true,      // giriş bilgilerinin tek bir satırda kalmasını
-        maxLines = 1,
-        onValueChange = { email = it },
-        label = { Text(text = "Email Address", color = if(darkTheme) LabelColorDark else LabelColor) },
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Email,
-            imeAction = ImeAction.Search
-        ),
-
-        keyboardActions = KeyboardActions(
-            onSearch = {
-                Log.i("ImeAction", "clicked")
-            }
-        )
-    )
-}
-@Composable
-fun SignUpButton() {
+fun SignUpButton(onClick: () -> Unit) {
     val darkTheme = isSystemInDarkTheme()
 
     Button(
-        onClick = {
-            //println("Credentials: Email = $email , Password = $password")
-        },
+        onClick = onClick,
         colors = ButtonDefaults.buttonColors(
-            containerColor =  if(darkTheme) ButtonColorDark else ButtonColor, // Arka plan rengi
-            contentColor =  if(darkTheme)  ButtonTextColorDark else ButtonTextColor // Metin rengi
+            containerColor = if (darkTheme) ButtonColorDark else ButtonColor, // Background color
+            contentColor = if (darkTheme) ButtonTextColorDark else ButtonTextColor // Text color
         )
     ) {
         Text(
             text = "Sign Up",
             fontSize = 16.sp,
-            fontWeight = FontWeight.Bold)
+            fontWeight = FontWeight.Bold
+        )
     }
 }
+
 
 @Composable
 fun LoginButton() {

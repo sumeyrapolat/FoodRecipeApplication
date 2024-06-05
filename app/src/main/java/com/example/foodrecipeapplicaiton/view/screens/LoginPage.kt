@@ -12,6 +12,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,11 +27,15 @@ import androidx.compose.ui.unit.sp
 import com.example.foodrecipeapplicaiton.R
 import com.example.foodrecipeapplicaiton.view.components.LoginButton
 import com.example.foodrecipeapplicaiton.view.components.PasswordTextField
+import com.example.foodrecipeapplicaiton.view.components.UserEmailTextField
 import com.example.foodrecipeapplicaiton.view.components.UserNameTextField
 
 @Composable
 fun LoginScreen() {
     val darkTheme = isSystemInDarkTheme()
+
+    var userName by remember { mutableStateOf("") }
+    var userEmail by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -53,9 +61,11 @@ fun LoginScreen() {
                 verticalArrangement = Arrangement.spacedBy(6.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                UserNameTextField()
+                UserNameTextField(onValueChange = { userName = it })
+                UserEmailTextField(onValueChange = { userEmail = it })
 
-                PasswordTextField()
+
+                //PasswordTextField()
             }
         }
 
