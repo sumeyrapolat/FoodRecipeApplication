@@ -42,7 +42,7 @@ fun LoginScreen() {
         ) {
             Image(
                 painter = painterResource(id =
-                if (darkTheme) R.drawable.darkicon else R.drawable.ligthicon),
+                if (darkTheme) R.drawable.darkicon else R.drawable.lighticon),
                 contentDescription = "logo",
                 modifier = Modifier.size(220.dp)
             )
@@ -74,7 +74,7 @@ fun LoginScreen() {
             text = "Go To Sign Up Screen",
             color = if (darkTheme) Color.White else Color.Black,
             fontSize = 16.sp,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.SemiBold,
         )
 
     }

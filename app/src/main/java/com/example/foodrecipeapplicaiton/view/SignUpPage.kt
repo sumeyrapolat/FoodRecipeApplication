@@ -47,7 +47,7 @@ fun SignUpScreen(paddingValues: PaddingValues) {
         ) {
             Image(
                 painter = painterResource(id =
-                if (darkTheme) R.drawable.darkicon else R.drawable.ligthicon),
+                if (darkTheme) R.drawable.darkicon else R.drawable.lighticon),
                 contentDescription = "logo",
                 modifier = Modifier.size(220.dp)
             )
@@ -92,7 +92,7 @@ fun SignUpScreen(paddingValues: PaddingValues) {
             text = "I Have Already an Account",
             color = if (darkTheme) Color.White else Color.Black,
             fontSize = 16.sp,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.SemiBold,
             )
     }
 }

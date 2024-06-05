@@ -20,6 +20,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -179,7 +180,10 @@ fun SignUpButton() {
             contentColor =  if(darkTheme)  ButtonTextColorDark else ButtonTextColor // Metin rengi
         )
     ) {
-        Text(text = "Sign Up", fontSize = 16.sp)
+        Text(
+            text = "Sign Up",
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold)
     }
 }
 
@@ -196,6 +200,6 @@ fun LoginButton() {
             contentColor =  if(darkTheme)  ButtonTextColorDark else ButtonTextColor // Metin rengi
         )
     ) {
-        Text(text = "Login", fontSize = 16.sp)
+        Text(text = "Login", fontSize = 16.sp, fontWeight = FontWeight.Bold)
     }
 }

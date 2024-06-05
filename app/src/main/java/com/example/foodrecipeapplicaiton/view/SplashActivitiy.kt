@@ -49,7 +49,7 @@ class SplashActivity : ComponentActivity() {
 
         // Delay using Coroutine
         CoroutineScope(Dispatchers.Main).launch {
-            delay(2000) // 2 seconds delay
+            delay(1000) // 1 seconds delay
             startActivity(Intent(this@SplashActivity, MainActivity::class.java))
             finish()
         }
@@ -71,7 +71,7 @@ fun SplashScreen() {
 
         Image(
             painter = painterResource(id =
-            if (darkTheme) R.drawable.darkicon else R.drawable.ligthicon),
+            if (darkTheme) R.drawable.darkicon else R.drawable.lighticon),
             contentDescription = "logo",
             modifier = Modifier.size(220.dp)
         )
