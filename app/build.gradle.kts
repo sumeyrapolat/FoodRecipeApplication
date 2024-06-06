@@ -81,7 +81,7 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
-//    implementation(libs.firebase.auth)
+    //implementation(libs.firebase.auth)
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.navigation.compose)
@@ -99,16 +99,14 @@ dependencies {
     // Lottie
     implementation(libs.lottie.compose)
 
-    // Firebase
-//    implementation(libs.firebase.auth)
-//    implementation(libs.firebase.firestore.ktx)
 
     // Swipe Refresh
     implementation(libs.accompanist.swiperefresh)
 
     // Room
     implementation(libs.androidx.room.ktx)
-//    kapt(libs.androidx.room.compiler)
+
+    //kapt(libs.androidx.room.compiler)
     ksp("androidx.room:room-compiler:2.6.1")
 
     implementation (libs.androidx.room.runtime)
@@ -127,9 +125,20 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation (libs.play.services.auth)
+    //google authentication
+    implementation(libs.play.services.auth)
 
-    implementation ("androidx.compose.runtime:runtime-livedata:1.6.7")
+    //livedata
+    implementation(libs.androidx.runtime.livedata)
+
+ 
+
+
+
+
+
+
+
 
 
 }
