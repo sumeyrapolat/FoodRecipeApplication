@@ -12,26 +12,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberImagePainter
 import com.example.foodrecipeapplicaiton.R
+
+
 
 @Composable
 fun RecipeCard(
     title: String,
     ingredients: String,
-    imageRes: Int
+    imageUrl: String
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp, horizontal = 16.dp)
             .clip(RoundedCornerShape(16.dp)),
-        //elevation = 4.dp
     ) {
         Column(
             modifier = Modifier
@@ -39,7 +40,7 @@ fun RecipeCard(
                 .padding(16.dp)
         ) {
             Image(
-                painter = painterResource(id = imageRes),
+                painter = rememberImagePainter(imageUrl),
                 contentDescription = null,
                 modifier = Modifier
                     .height(200.dp)
@@ -76,9 +77,5 @@ fun RecipeCard(
 @Preview
 @Composable
 private fun RecipeCardPreview() {
-    RecipeCard(
-        title = "Delicious Pasta",
-        ingredients = "Tomatoes, Basil, Garlic, Olive oil, Pasta, Salt, Pepper, Parmesan",
-        imageRes = R.drawable.ic_launcher_background
-    )
+
 }
