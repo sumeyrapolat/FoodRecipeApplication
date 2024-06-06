@@ -13,7 +13,6 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.QuestionAnswer
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -158,7 +157,7 @@ fun BottomBar(navController: NavController) {
             val items = listOf(
                 BottomNavItem("home", Icons.Filled.Home, "Home", Routes.MAIN),
                 BottomNavItem("favorites", Icons.Filled.Favorite, "Favorites", Routes.MAIN), // Değiştirilecek route
-                BottomNavItem("chat", Icons.Filled.QuestionAnswer, "AI Chat", Routes.MAIN), // Değiştirilecek route
+                BottomNavItem("notifications", Icons.Filled.Notifications, "Notifications", Routes.MAIN), // Değiştirilecek route
                 BottomNavItem("profile", Icons.Filled.Person, "Profile", Routes.MAIN) // Değiştirilecek route
             )
             items.forEach { item ->

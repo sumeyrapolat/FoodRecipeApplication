@@ -38,7 +38,7 @@ fun CategoryTabs() {
         indicator = { tabPositions ->
             TabRowDefaults.Indicator(
                 Modifier.tabIndicatorOffset(tabPositions[selectedCategory]),
-                color = Color.DarkGray // Change the color here
+                color = Color.DarkGray
             )
         }
     ) {
@@ -58,9 +58,9 @@ fun CategoryTabs() {
                 selected = selectedCategory == index,
                 onClick = { selectedCategory = index },
                 modifier = Modifier
-                    .padding(vertical = 5.dp, horizontal = 5.dp)
                     .clip(RoundedCornerShape(20.dp))
                     .background(if (selectedCategory == index) Color.Black else Color.Transparent)
+                    .padding(vertical = 5.dp, horizontal = 5.dp)
 
             )
         }
