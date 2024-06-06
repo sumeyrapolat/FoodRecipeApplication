@@ -14,8 +14,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -48,8 +47,11 @@ class MainActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // ViewModelFactory kullanarak RecipeViewModel'in oluşturulması
 
         auth = FirebaseAuth.getInstance()
         googleSignInClient = GoogleSignIn.getClient(
@@ -69,10 +71,9 @@ class MainActivity : ComponentActivity() {
                     .addOnCompleteListener(this) { authResult ->
                         if (authResult.isSuccessful) {
                             // Successfully signed in
-                            // Navigate to the main screen
                             setContent {
                                 FoodRecipeApplicaitonTheme(darkTheme = isSystemInDarkTheme()) {
-                                    MainContent()
+                                    MainContent(startDestination = Routes.MAIN)
                                 }
                             }
                         } else {
@@ -82,16 +83,18 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        val startDestination = if (auth.currentUser != null) Routes.MAIN else Routes.LOGIN
+
         setContent {
             FoodRecipeApplicaitonTheme(darkTheme = isSystemInDarkTheme()) {
-                MainContent()
+                MainContent(startDestination)
             }
         }
     }
 }
 
 @Composable
-private fun MainContent() {
+private fun MainContent(startDestination: String) {
     val darkTheme = isSystemInDarkTheme()
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -124,7 +127,7 @@ private fun MainContent() {
                 }
             }
         ) { paddingValues ->
-            NavHost(navController = navController, startDestination = Routes.LOGIN, Modifier.padding(paddingValues)) {
+            NavHost(navController = navController, startDestination = startDestination, Modifier.padding(paddingValues)) {
                 composable(Routes.SIGN_UP) { SignUpScreen(navController = navController) }
                 composable(Routes.LOGIN) { LoginScreen(navController) }
                 composable(Routes.MAIN) { MainScreen() }
@@ -132,6 +135,7 @@ private fun MainContent() {
         }
     }
 }
+
 @Composable
 fun BottomBar(navController: NavController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -142,7 +146,7 @@ fun BottomBar(navController: NavController) {
             .fillMaxWidth()
             .background(
                 color = Color.Black,
-                shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
+                shape = RoundedCornerShape(32.dp)
             )
     ) {
         NavigationBar(
@@ -179,4 +183,3 @@ fun BottomBar(navController: NavController) {
 }
 
 data class BottomNavItem(val route: String, val icon: ImageVector, val label: String, val screenRoute: String)
-

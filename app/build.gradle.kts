@@ -129,6 +129,9 @@ dependencies {
 
     implementation (libs.play.services.auth)
 
+    implementation ("androidx.compose.runtime:runtime-livedata:1.6.7")
+
+
 }
 
 kapt {
