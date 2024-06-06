@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,16 +25,22 @@ import androidx.compose.ui.text.style.TextOverflow
 
 @Composable
 fun CategoryTabs() {
-    val categories = listOf("Popular", "Vegetarian", "Gluten Free", "Vegan", "Dairy Free")
+    val categories = listOf("Popular", "Healty" ,"Vegetarian", "Gluten Free", "Vegan", "Dairy Free")
     var selectedCategory by remember { mutableStateOf(0) }
 
     ScrollableTabRow(
         modifier = Modifier
-            .background(Color(0xFF1E1E1E))
-            .padding(horizontal = 8.dp),
+            .padding(horizontal = 8.dp)
+            .background(Color(0xFF1E1E1E)),
         selectedTabIndex = selectedCategory,
         contentColor = Color.White,
-        edgePadding = 16.dp
+        edgePadding = 5.dp,
+        indicator = { tabPositions ->
+            TabRowDefaults.Indicator(
+                Modifier.tabIndicatorOffset(tabPositions[selectedCategory]),
+                color = Color.DarkGray // Change the color here
+            )
+        }
     ) {
         categories.forEachIndexed { index, category ->
             Tab(
@@ -50,9 +58,10 @@ fun CategoryTabs() {
                 selected = selectedCategory == index,
                 onClick = { selectedCategory = index },
                 modifier = Modifier
+                    .padding(vertical = 5.dp, horizontal = 5.dp)
                     .clip(RoundedCornerShape(20.dp))
                     .background(if (selectedCategory == index) Color.Black else Color.Transparent)
-                    .padding(vertical = 5.dp, horizontal = 5.dp)
+
             )
         }
     }
