@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FoodRecipeApplicaiton</string>
+    <string name="default_web_client_id">AIzaSyAuiyeyA4VeaJRxXlgQCG5D8Gg5oya6eYA</string>
+
 </resources>
