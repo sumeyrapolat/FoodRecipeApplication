@@ -58,10 +58,10 @@ fun CategoryTabs() {
                 selected = selectedCategory == index,
                 onClick = { selectedCategory = index },
                 modifier = Modifier
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(if (selectedCategory == index) Color.Black else Color.Transparent)
                     .padding(vertical = 5.dp, horizontal = 5.dp)
 
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(if (selectedCategory == index) Color.Black else Color.Transparent)
             )
         }
     }

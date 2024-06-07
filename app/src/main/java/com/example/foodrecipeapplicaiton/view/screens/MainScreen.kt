@@ -49,14 +49,14 @@ fun MainScreen(recipeViewModel: RecipeViewModel = viewModel(factory = RecipeView
                 RecipeCard(
                     title = recipe.title,
                     ingredients = recipe.extendedIngredients.joinToString(", ") { it.name },
-                    imageUrl = recipe.image // URL'yi gönder
+                    imageUrl = recipe.image
                 )
             }
         }
     }
 
     LaunchedEffect(recipeViewModel) {
-        recipeViewModel.fetchRandomRecipes("ac2c2e45e95d4fd7b935bf5994abd918", 10)
+        recipeViewModel.fetchRandomRecipes("ac2c2e45e95d4fd7b935bf5994abd918", 200)
     }
 }
 
