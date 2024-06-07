@@ -1,5 +1,6 @@
 package com.example.foodrecipeapplicaiton.view.screens
 
+import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,22 +17,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.foodrecipeapplicaiton.R
 import com.example.foodrecipeapplicaiton.api.key.Constants.API_KEY
 import com.example.foodrecipeapplicaiton.api.service.RetrofitClient
 import com.example.foodrecipeapplicaiton.repository.RecipeRepository
 import com.example.foodrecipeapplicaiton.view.components.CategoryTabs
 import com.example.foodrecipeapplicaiton.view.components.RecipeCard
+import com.example.foodrecipeapplicaiton.view.routes.Routes
 import com.example.foodrecipeapplicaiton.viewmodel.RecipeViewModel
 import com.example.foodrecipeapplicaiton.viewmodel.RecipeViewModelFactory
 
 @Composable
-fun MainScreen(recipeViewModel: RecipeViewModel = viewModel(factory = RecipeViewModelFactory(
-    RecipeRepository(RetrofitClient.recipeApiService)
-))) {
+fun MainScreen(navController: NavController, recipeViewModel: RecipeViewModel) {
     val darkTheme = isSystemInDarkTheme()
-
-
     val recipes = recipeViewModel.recipes.collectAsState().value
 
     Column(
@@ -40,7 +39,7 @@ fun MainScreen(recipeViewModel: RecipeViewModel = viewModel(factory = RecipeView
         Spacer(modifier = Modifier.padding(10.dp))
 
         CategoryTabs(onCategorySelected = { category ->
-            recipeViewModel.fetchRecipes(API_KEY, 200, category)
+            recipeViewModel.fetchRecipes(API_KEY, 250, category)
         })
 
         Spacer(modifier = Modifier.padding(10.dp))
@@ -54,19 +53,19 @@ fun MainScreen(recipeViewModel: RecipeViewModel = viewModel(factory = RecipeView
                 RecipeCard(
                     title = recipe.title,
                     ingredients = recipe.extendedIngredients.joinToString(", ") { it.name },
-                    imageUrl = recipe.image ?: if(darkTheme) R.drawable.darknoimage.toString() else R.drawable.lightnoimage.toString()
+                    imageUrl = recipe.image ?: if (darkTheme) R.drawable.darknoimage.toString() else R.drawable.lightnoimage.toString(),
+                    onClick = {
+
+                        Log.d("MainScreen", "Recipe card clicked, navigating to detail screen...")
+                        navController.navigate(Routes.detailScreenRoute(recipe.id))
+
+                    }
                 )
             }
         }
     }
 
     LaunchedEffect(recipeViewModel) {
-        recipeViewModel.fetchRecipes(API_KEY, 200)
+        recipeViewModel.fetchRecipes(API_KEY, 250)
     }
-}
-
-@Preview
-@Composable
-private fun MainScreenPreview() {
-    MainScreen()
 }

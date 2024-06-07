@@ -36,4 +36,8 @@ class RecipeViewModel(private val repository: RecipeRepository) : ViewModel() {
             else -> recipes
         }
     }
+
+    fun getRecipeById(recipeId: Int): Recipe? {
+        return recipes.value.find { it.id == recipeId }
+    }
 }

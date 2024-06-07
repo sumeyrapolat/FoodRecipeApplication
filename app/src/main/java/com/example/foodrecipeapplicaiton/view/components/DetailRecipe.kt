@@ -3,7 +3,16 @@ package com.example.foodrecipeapplicaiton.view.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
@@ -20,29 +29,29 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.example.foodrecipeapplicaiton.R
 
 
-
 @Composable
-fun RecipeCard(
+fun RecipeCardDetail(
     title: String,
     ingredients: String,
     imageUrl: String,
-    onClick: () -> Unit
+    instructions: String,
+    servings: Int,
+    readyInMinutes: Int
 ) {
+
     var isFavorite by remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp, horizontal = 16.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .clickable(onClick = onClick),
+            .fillMaxSize()
+            .padding(vertical = 5.dp, horizontal = 5.dp)
+            .clip(RoundedCornerShape(16.dp)),
     ) {
         Column(
             modifier = Modifier
@@ -93,16 +102,51 @@ fun RecipeCard(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Text(
-                text = "Ingredients: $ingredients",
-                fontSize = 18.sp,
-                color = Color.DarkGray,
-                maxLines = 3,
-                overflow = TextOverflow.Ellipsis
-            )
+            InformationColumn(title = "Ingredients", value = ingredients)
+            InformationColumn(title = "Instructions", value = instructions)
+            InformationRow(title = "Servings", value = servings.toString())
+            InformationRow(title = "Ready Minutes", value = readyInMinutes.toString())
+
         }
     }
 }
 
+@Composable
+fun InformationColumn(title: String, value: String) {
+    Column(
+        horizontalAlignment = Alignment.Start
+    ) {
+        Text(
+            text = "$title: ",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black,
+        )
+        Text(
+            text = value,
+            fontSize = 16.sp,
+            color = Color.DarkGray,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
+}
 
-
+@Composable
+fun InformationRow(title: String, value: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "$title: ",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black,
+        )
+        Text(
+            text = value,
+            fontSize = 16.sp,
+            color = Color.DarkGray,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
+}
