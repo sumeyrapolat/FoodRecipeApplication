@@ -2,16 +2,22 @@ package com.example.foodrecipeapplicaiton.view.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,6 +34,8 @@ fun RecipeCard(
     ingredients: String,
     imageUrl: String
 ) {
+    var isFavorite by remember { mutableStateOf(false) }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -52,21 +60,41 @@ fun RecipeCard(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
-                text = title,
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = title,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Black,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f)
+                )
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Box(
+                    modifier = Modifier.padding(end = if (title.length > 30) 0.dp else 8.dp)
+                        .clickable {
+                            isFavorite = !isFavorite
+                        }
+                ) {
+                    Image(
+                        painter = painterResource(if (isFavorite) R.drawable.liked else R.drawable.like),
+                        contentDescription = "Favorite Icon",
+                        modifier = Modifier.size(30.dp)
+                    )
+                }
+            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
                 text = ingredients,
                 fontSize = 16.sp,
-                color = Color.Gray,
+                color = Color.DarkGray,
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis
             )
@@ -74,8 +102,5 @@ fun RecipeCard(
     }
 }
 
-@Preview
-@Composable
-private fun RecipeCardPreview() {
 
-}
+
