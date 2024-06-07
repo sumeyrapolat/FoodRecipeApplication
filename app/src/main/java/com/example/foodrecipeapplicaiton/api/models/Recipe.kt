@@ -18,7 +18,7 @@ data class Recipe(
     val glutenFree: Boolean,
     val healthScore: Int,
     val id: Int,
-    val image: String,
+    val image: String?,
     val imageType: String,
     val instructions: String,
     val license: String,
