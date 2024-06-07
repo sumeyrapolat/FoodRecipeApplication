@@ -24,8 +24,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 
 @Composable
-fun CategoryTabs() {
-    val categories = listOf("Popular", "Healty" ,"Vegetarian", "Gluten Free", "Vegan", "Dairy Free")
+fun CategoryTabs(onCategorySelected: (String) -> Unit) {
+    val categories = listOf("Popular", "Healthy", "Vegetarian", "Gluten Free", "Vegan", "Dairy Free")
     var selectedCategory by remember { mutableStateOf(0) }
 
     ScrollableTabRow(
@@ -56,10 +56,12 @@ fun CategoryTabs() {
                     )
                 },
                 selected = selectedCategory == index,
-                onClick = { selectedCategory = index },
+                onClick = {
+                    selectedCategory = index
+                    onCategorySelected(category) // Call the callback when a category is selected
+                },
                 modifier = Modifier
                     .padding(vertical = 5.dp, horizontal = 5.dp)
-
                     .clip(RoundedCornerShape(20.dp))
                     .background(if (selectedCategory == index) Color.Black else Color.Transparent)
             )
@@ -67,8 +69,4 @@ fun CategoryTabs() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun CategoryTabsPreview() {
-    CategoryTabs()
-}
+
