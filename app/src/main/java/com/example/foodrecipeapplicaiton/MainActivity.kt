@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person2
+import androidx.compose.material.icons.filled.QuestionAnswer
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -67,18 +68,10 @@ class MainActivity : ComponentActivity() {
                         if (authResult.isSuccessful) {
                             setContent {
                                 FoodRecipeApplicaitonTheme(darkTheme = isSystemInDarkTheme()) {
-                                    val bottomNavItems = listOf(
-                                        BottomNavItem(Routes.MAIN, Icons.Filled.Home, "Home", "main/{category}"),
-                                        BottomNavItem(Routes.FAVORITE_SCREEN, Icons.Filled.Favorite, "Favorite", "favorites"),
-                                        BottomNavItem(Routes.MAIN, Icons.Filled.Notifications, "Notifications", "main/{category}"),
-                                        BottomNavItem(Routes.MAIN, Icons.Filled.Person2, "Profile", "main/{category}")
-                                    )
-
                                     val recipeViewModel: RecipeViewModel = viewModel(factory = RecipeViewModelFactory(
                                         RecipeRepository(RetrofitClient.recipeApiService)
                                     ))
-
-                                    MainContent(startDestination = Routes.MAIN, recipeViewModel = recipeViewModel, bottomNavItems = bottomNavItems)
+                                    MainContent(startDestination = Routes.MAIN, recipeViewModel = recipeViewModel)
                                 }
                             }
                         } else {
@@ -91,19 +84,11 @@ class MainActivity : ComponentActivity() {
         val startDestination = if (auth.currentUser != null) Routes.MAIN else Routes.LOGIN
 
         setContent {
-            val recipeViewModel: RecipeViewModel = viewModel(factory = RecipeViewModelFactory(
-                RecipeRepository(RetrofitClient.recipeApiService)
-            ))
-
-            val bottomNavItems = listOf(
-                BottomNavItem(Routes.MAIN, Icons.Filled.Home, "Home", "main/{category}"),
-                BottomNavItem(Routes.FAVORITE_SCREEN, Icons.Filled.Favorite, "Favorite", "favorites"),
-                BottomNavItem(Routes.MAIN, Icons.Filled.Notifications, "Notifications", "main/{category}"),
-                BottomNavItem(Routes.MAIN, Icons.Filled.Person2, "Profile", "main/{category}")
-            )
-
             FoodRecipeApplicaitonTheme(darkTheme = isSystemInDarkTheme()) {
-                MainContent(startDestination = startDestination, recipeViewModel = recipeViewModel, bottomNavItems = bottomNavItems)
+                val recipeViewModel: RecipeViewModel = viewModel(factory = RecipeViewModelFactory(
+                    RecipeRepository(RetrofitClient.recipeApiService)
+                ))
+                MainContent(startDestination = startDestination, recipeViewModel = recipeViewModel)
             }
         }
     }
@@ -111,7 +96,7 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-private fun MainContent(startDestination: String, recipeViewModel: RecipeViewModel, bottomNavItems: List<BottomNavItem>) {
+private fun MainContent(startDestination: String, recipeViewModel: RecipeViewModel) {
     val darkTheme = isSystemInDarkTheme()
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -140,6 +125,13 @@ private fun MainContent(startDestination: String, recipeViewModel: RecipeViewMod
             },
             bottomBar = {
                 if (currentRoute != Routes.LOGIN && currentRoute != Routes.SIGN_UP) {
+                    val bottomNavItems = listOf(
+                        BottomNavItem(Routes.MAIN, Icons.Filled.Home, "main/{category}"),
+                        BottomNavItem(Routes.FAVORITE_SCREEN, Icons.Filled.Favorite, "favorites"),
+                        BottomNavItem(Routes.CHAT_SCREEN, Icons.Filled.QuestionAnswer, "chat_screen"),
+                        BottomNavItem(Routes.MAIN, Icons.Filled.Notifications, "main/{category}"),
+                        BottomNavItem(Routes.MAIN, Icons.Filled.Person2, "main/{category}")
+                    )
                     BottomBar(navController = navController, bottomNavItems = bottomNavItems, onItemClick = { screenRoute ->
                         navController.navigate(screenRoute)
                     })
