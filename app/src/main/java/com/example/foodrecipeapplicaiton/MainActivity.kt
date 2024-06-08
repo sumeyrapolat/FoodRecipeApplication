@@ -7,25 +7,18 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Person2
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.foodrecipeapplicaiton.api.service.RetrofitClient
@@ -36,12 +29,9 @@ import com.example.foodrecipeapplicaiton.ui.theme.TopAppBarColorDark
 import com.example.foodrecipeapplicaiton.ui.theme.TopBarTextColor
 import com.example.foodrecipeapplicaiton.ui.theme.TopBarTextColorDark
 import com.example.foodrecipeapplicaiton.view.components.BottomBar
+import com.example.foodrecipeapplicaiton.view.components.BottomNavItem
 import com.example.foodrecipeapplicaiton.view.navigation.AppNavHost
 import com.example.foodrecipeapplicaiton.view.routes.Routes
-import com.example.foodrecipeapplicaiton.view.screens.DetailScreen
-import com.example.foodrecipeapplicaiton.view.screens.LoginScreen
-import com.example.foodrecipeapplicaiton.view.screens.MainScreen
-import com.example.foodrecipeapplicaiton.view.screens.SignUpScreen
 import com.example.foodrecipeapplicaiton.viewmodel.RecipeViewModel
 import com.example.foodrecipeapplicaiton.viewmodel.RecipeViewModelFactory
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -76,11 +66,19 @@ class MainActivity : ComponentActivity() {
                     .addOnCompleteListener(this) { authResult ->
                         if (authResult.isSuccessful) {
                             setContent {
-                                val recipeViewModel: RecipeViewModel = viewModel(factory = RecipeViewModelFactory(
-                                    RecipeRepository(RetrofitClient.recipeApiService)
-                                ))
                                 FoodRecipeApplicaitonTheme(darkTheme = isSystemInDarkTheme()) {
-                                    MainContent(startDestination = Routes.MAIN, recipeViewModel = recipeViewModel)
+                                    val bottomNavItems = listOf(
+                                        BottomNavItem(Routes.MAIN, Icons.Filled.Home, "Home", "main/{category}"),
+                                        BottomNavItem(Routes.FAVORITE_SCREEN, Icons.Filled.Favorite, "Favorite", "favorites"),
+                                        BottomNavItem(Routes.MAIN, Icons.Filled.Notifications, "Notifications", "main/{category}"),
+                                        BottomNavItem(Routes.MAIN, Icons.Filled.Person2, "Profile", "main/{category}")
+                                    )
+
+                                    val recipeViewModel: RecipeViewModel = viewModel(factory = RecipeViewModelFactory(
+                                        RecipeRepository(RetrofitClient.recipeApiService)
+                                    ))
+
+                                    MainContent(startDestination = Routes.MAIN, recipeViewModel = recipeViewModel, bottomNavItems = bottomNavItems)
                                 }
                             }
                         } else {
@@ -96,8 +94,16 @@ class MainActivity : ComponentActivity() {
             val recipeViewModel: RecipeViewModel = viewModel(factory = RecipeViewModelFactory(
                 RecipeRepository(RetrofitClient.recipeApiService)
             ))
+
+            val bottomNavItems = listOf(
+                BottomNavItem(Routes.MAIN, Icons.Filled.Home, "Home", "main/{category}"),
+                BottomNavItem(Routes.FAVORITE_SCREEN, Icons.Filled.Favorite, "Favorite", "favorites"),
+                BottomNavItem(Routes.MAIN, Icons.Filled.Notifications, "Notifications", "main/{category}"),
+                BottomNavItem(Routes.MAIN, Icons.Filled.Person2, "Profile", "main/{category}")
+            )
+
             FoodRecipeApplicaitonTheme(darkTheme = isSystemInDarkTheme()) {
-                MainContent(startDestination = startDestination, recipeViewModel = recipeViewModel)
+                MainContent(startDestination = startDestination, recipeViewModel = recipeViewModel, bottomNavItems = bottomNavItems)
             }
         }
     }
@@ -105,7 +111,7 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-private fun MainContent(startDestination: String, recipeViewModel: RecipeViewModel) {
+private fun MainContent(startDestination: String, recipeViewModel: RecipeViewModel, bottomNavItems: List<BottomNavItem>) {
     val darkTheme = isSystemInDarkTheme()
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -134,7 +140,9 @@ private fun MainContent(startDestination: String, recipeViewModel: RecipeViewMod
             },
             bottomBar = {
                 if (currentRoute != Routes.LOGIN && currentRoute != Routes.SIGN_UP) {
-                    BottomBar(navController)
+                    BottomBar(navController = navController, bottomNavItems = bottomNavItems, onItemClick = { screenRoute ->
+                        navController.navigate(screenRoute)
+                    })
                 }
             }
         ) { paddingValues ->

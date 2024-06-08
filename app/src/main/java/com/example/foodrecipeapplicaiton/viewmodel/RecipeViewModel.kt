@@ -14,6 +14,22 @@ class RecipeViewModel(private val repository: RecipeRepository) : ViewModel() {
     private val _recipes = MutableStateFlow<List<Recipe>>(emptyList())
     val recipes: StateFlow<List<Recipe>> = _recipes
 
+    // Favori tarifleri tutacak StateFlow
+    private val _favoriteRecipes = MutableStateFlow<List<Recipe>>(emptyList())
+    val favoriteRecipes: StateFlow<List<Recipe>> = _favoriteRecipes
+
+    // Favori tarif ekleme işlevi
+    fun addFavoriteRecipe(recipe: Recipe) {
+        val updatedList = _favoriteRecipes.value.toMutableList().apply { add(recipe) }
+        _favoriteRecipes.value = updatedList
+    }
+
+    // Favori tarif çıkarma işlevi
+    fun removeFavoriteRecipe(recipe: Recipe) {
+        val updatedList = _favoriteRecipes.value.toMutableList().apply { remove(recipe) }
+        _favoriteRecipes.value = updatedList
+    }
+
     fun fetchRecipes(apiKey: String, number: Int, category: String? = null) {
         viewModelScope.launch {
             val allRecipes = repository.getRandomRecipes(apiKey, number)
