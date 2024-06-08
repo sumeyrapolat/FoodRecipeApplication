@@ -93,13 +93,23 @@ fun RecipeCard(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Text(
-                text = "Ingredients: $ingredients",
-                fontSize = 18.sp,
-                color = Color.DarkGray,
-                maxLines = 3,
-                overflow = TextOverflow.Ellipsis
-            )
+            Column(
+                horizontalAlignment = Alignment.Start
+            ) {
+                Text(
+                    text = "Ingredients:",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black,
+                )
+                Text(
+                    text = ingredients,
+                    fontSize = 18.sp,
+                    color = Color.DarkGray,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
         }
     }
 }
