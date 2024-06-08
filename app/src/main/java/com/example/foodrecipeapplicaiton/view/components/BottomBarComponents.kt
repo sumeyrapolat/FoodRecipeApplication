@@ -5,15 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -21,12 +13,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.foodrecipeapplicaiton.view.routes.Routes
 
 @Composable
-fun BottomBar(navController: NavController) {
+fun BottomBar(navController: NavController, bottomNavItems: List<BottomNavItem>, onItemClick: (String) -> Unit) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
@@ -43,29 +33,31 @@ fun BottomBar(navController: NavController) {
             containerColor = Color.Transparent,
             contentColor = Color.White
         ) {
-            val items = listOf(
-                BottomNavItem("home", Icons.Filled.Home, "Home", Routes.MAIN),
-                BottomNavItem("favorites", Icons.Filled.Favorite, "Favorites", Routes.MAIN), // Değiştirilecek route
-                BottomNavItem("notifications", Icons.Filled.Notifications, "Notifications", Routes.MAIN), // Değiştirilecek route
-                BottomNavItem("profile", Icons.Filled.Person, "Profile", Routes.MAIN) // Değiştirilecek route
-            )
-            items.forEach { item ->
+            bottomNavItems.forEach { item ->
+                val selected = currentRoute == item.route
                 NavigationBarItem(
-                    icon = { Icon(item.icon, contentDescription = item.label, tint = Color.White) },
-                    label = { Text(item.label, color = Color.White) },
-                    selected = currentRoute == item.route,
+                    icon = {
+                        Icon(
+                            item.icon,
+                            contentDescription = item.label,
+                            tint = if (selected) Color.Black else Color.White
+                        )
+                    },
+                    label = {
+                        Text(
+                            item.label,
+                            color = if (selected) Color.White else Color.White
+                        )
+                    },
+                    selected = selected,
                     onClick = {
-                        navController.navigate(item.route) {
-                            // Clear back stack to prevent multiple instances of the same route
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                            // Avoid multiple copies of the same destination when reselecting the same item
-                            launchSingleTop = true
-                            // Restore state when reselecting a previously selected item
-                            restoreState = true
-                        }
-                    }
+                        onItemClick(item.screenRoute)
+                    },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = Color.Black,
+                        unselectedIconColor = Color.White,
+                        indicatorColor = Color.White
+                    )
                 )
             }
         }
