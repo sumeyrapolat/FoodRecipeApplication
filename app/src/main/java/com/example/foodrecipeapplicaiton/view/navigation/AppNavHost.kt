@@ -1,8 +1,11 @@
 package com.example.foodrecipeapplicaiton.view.navigation
 
 import android.util.Log
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
+import androidx.compose.runtime.MutableState
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -15,9 +18,16 @@ import com.example.foodrecipeapplicaiton.view.screens.LoginScreen
 import com.example.foodrecipeapplicaiton.view.screens.MainScreen
 import com.example.foodrecipeapplicaiton.view.screens.SignUpScreen
 import com.example.foodrecipeapplicaiton.viewmodel.RecipeViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun AppNavHost(navController: NavHostController = rememberNavController(), recipeViewModel: RecipeViewModel) {
+fun AppNavHost(
+    navController: NavHostController = rememberNavController(),
+    recipeViewModel: RecipeViewModel,
+    imagePicker: ActivityResultLauncher<PickVisualMediaRequest>,
+    paddingValues: PaddingValues,
+    uriState: MutableStateFlow<String>
+) {
     NavHost(navController = navController, startDestination = Routes.MAIN) {
         composable(Routes.SIGN_UP) { SignUpScreen(navController = navController) }
         composable(Routes.LOGIN) { LoginScreen(navController = navController) }
@@ -30,8 +40,12 @@ fun AppNavHost(navController: NavHostController = rememberNavController(), recip
         }
 
         composable(Routes.CHAT_SCREEN) {
-            // Burada chat ekranını oluşturmanız gerekiyor
-            ChatScreen(navController = navController)
+            ChatScreen(
+                navController = navController,
+                imagePicker = imagePicker,
+                paddingValues = paddingValues,
+                uriState = uriState
+            )
         }
 
         composable("${Routes.DETAIL_SCREEN}/{recipeId}") { backStackEntry ->
@@ -41,9 +55,7 @@ fun AppNavHost(navController: NavHostController = rememberNavController(), recip
                 DetailScreen(recipeId = recipeId, recipeViewModel = recipeViewModel, navController = navController)
             } else {
                 Log.e("AppNavHost", "recipeId is null, arguments: ${backStackEntry.arguments}")
-            }                // Hata durumunda gerçekleştirilecek işlemler
-
+            }
         }
-
     }
 }

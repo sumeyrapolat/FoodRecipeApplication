@@ -131,7 +131,10 @@ dependencies {
     //livedata
     implementation(libs.androidx.runtime.livedata)
 
- 
+    //gemini api
+    implementation(libs.gemini.api)
+
+
 
 
 

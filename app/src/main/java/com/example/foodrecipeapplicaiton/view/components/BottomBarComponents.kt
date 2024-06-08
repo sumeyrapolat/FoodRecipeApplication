@@ -46,8 +46,9 @@ fun BottomBar(navController: NavController, bottomNavItems: List<BottomNavItem>,
                     },
                     selected = selected,
                     onClick = {
-                        onItemClick(item.screenRoute)
-                    },
+                        if (currentRoute != item.route) {
+                            onItemClick(item.route)
+                        }                    },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = Color.Black,
                         unselectedIconColor = Color.White,
@@ -60,4 +61,9 @@ fun BottomBar(navController: NavController, bottomNavItems: List<BottomNavItem>,
 }
 
 
-data class BottomNavItem(val route: String, val icon: ImageVector, val screenRoute: String)
+data class BottomNavItem(
+    val route: String,
+    val icon: ImageVector,
+    val label: String,
+    val onClick: () -> Unit // Tıklama işlevi
+)

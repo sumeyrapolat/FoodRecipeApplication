@@ -40,6 +40,8 @@ roomRuntime = "2.6.1"
 firebaseAuth = "23.0.0"
 firebaseFirestore = "25.0.0"
 runtimeLivedata = "1.6.7"
+gemini-api = "0.7.0"
+
 
 
 
@@ -87,6 +89,8 @@ play-services-auth = { module = "com.google.android.gms:play-services-auth", ver
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "adapterRxjava2" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
+gemini-api = { group = "com.google.ai.client.generativeai", name = "generativeai", version.ref = "gemini-api" }
+
 
 [plugins]
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }

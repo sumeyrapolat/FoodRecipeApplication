@@ -2,6 +2,7 @@ package com.example.foodrecipeapplicaiton
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -22,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.foodrecipeapplicaiton.R
 import com.example.foodrecipeapplicaiton.api.service.RetrofitClient
 import com.example.foodrecipeapplicaiton.repository.RecipeRepository
 import com.example.foodrecipeapplicaiton.ui.theme.FoodRecipeApplicaitonTheme
@@ -40,11 +42,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class MainActivity : ComponentActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,10 +101,38 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 private fun MainContent(startDestination: String, recipeViewModel: RecipeViewModel) {
+
     val darkTheme = isSystemInDarkTheme()
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+
+    val onItemClick: (String) -> Unit = { route ->
+        navController.navigate(route) {
+            launchSingleTop = true
+        }
+    }
+
+
+    val uriState = remember { MutableStateFlow("") }
+
+    val imagePicker =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia()) { uri ->
+            uri?.let {
+                uriState.value = uri.toString()
+            }
+        }
+
+
+
+
+    val paddingValues = PaddingValues(
+        top = if (currentRoute == Routes.LOGIN || currentRoute == Routes.SIGN_UP) 0.dp else 16.dp,
+        bottom = 0.dp,
+        start = 0.dp,
+        end = 0.dp
+    )
+
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -126,21 +158,23 @@ private fun MainContent(startDestination: String, recipeViewModel: RecipeViewMod
             bottomBar = {
                 if (currentRoute != Routes.LOGIN && currentRoute != Routes.SIGN_UP) {
                     val bottomNavItems = listOf(
-                        BottomNavItem(Routes.MAIN, Icons.Filled.Home, "main/{category}"),
-                        BottomNavItem(Routes.FAVORITE_SCREEN, Icons.Filled.Favorite, "favorites"),
-                        BottomNavItem(Routes.CHAT_SCREEN, Icons.Filled.QuestionAnswer, "chat_screen"),
-                        BottomNavItem(Routes.MAIN, Icons.Filled.Notifications, "main/{category}"),
-                        BottomNavItem(Routes.MAIN, Icons.Filled.Person2, "main/{category}")
+                        BottomNavItem(Routes.MAIN, Icons.Filled.Home, "main/{category}", onClick = { onItemClick(Routes.MAIN) }),
+                        BottomNavItem(Routes.FAVORITE_SCREEN, Icons.Filled.Favorite, "favorites", onClick = { onItemClick(Routes.FAVORITE_SCREEN) }),
+                        BottomNavItem(Routes.CHAT_SCREEN, Icons.Filled.QuestionAnswer, "chat_screen", onClick = { onItemClick(Routes.CHAT_SCREEN) }),
+                        BottomNavItem(Routes.MAIN, Icons.Filled.Notifications, "main/{category}", onClick = { onItemClick(Routes.MAIN) }),
+                        BottomNavItem(Routes.MAIN, Icons.Filled.Person2, "main/{category}", onClick = { onItemClick(Routes.MAIN) })
                     )
-                    BottomBar(navController = navController, bottomNavItems = bottomNavItems, onItemClick = { screenRoute ->
-                        navController.navigate(screenRoute)
-                    })
+
+                    BottomBar(navController = navController, bottomNavItems = bottomNavItems, onItemClick = onItemClick)
                 }
             }
-        ) { paddingValues ->
-            Box(modifier = Modifier.padding(paddingValues)) {
-                AppNavHost(navController = navController, recipeViewModel = recipeViewModel)
+        ) { contentPadding ->
+            Box(
+                modifier = Modifier.padding(contentPadding)
+            ) {
+                AppNavHost(navController = navController, recipeViewModel = recipeViewModel, imagePicker = imagePicker, paddingValues = paddingValues, uriState = uriState)
             }
         }
     }
+
 }
