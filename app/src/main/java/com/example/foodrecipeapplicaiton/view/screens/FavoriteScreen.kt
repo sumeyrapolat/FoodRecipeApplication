@@ -26,9 +26,9 @@ import com.example.foodrecipeapplicaiton.viewmodel.RecipeViewModel
 @Composable
 fun FavoriteScreen(
     navController: NavController,
-    viewModel: RecipeViewModel
+    //viewModel: RecipeViewModel
 ) {
-    // Favori tariflerin listesini alın
+   /* // Favori tariflerin listesini alın
     val favoriteRecipes by viewModel.favoriteRecipes.collectAsState()
 
     // Favori tariflerin detaylarına gitmek için işlev
@@ -70,5 +70,5 @@ fun FavoriteScreen(
                 )
             }
         }
-    }
+    }*/
 }

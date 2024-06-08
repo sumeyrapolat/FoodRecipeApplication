@@ -7,6 +7,9 @@ import com.example.foodrecipeapplicaiton.api.chatmodel.Chat
 import com.example.foodrecipeapplicaiton.api.chatmodel.ChatData
 import com.example.foodrecipeapplicaiton.viewmodel.event.ChatUIEvent
 import com.example.foodrecipeapplicaiton.viewmodel.state.DataState
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,22 +17,56 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.Date
 
-
 class ChatViewModel : ViewModel() {
 
     private val _chatState = MutableStateFlow(DataState())
     val chatState = _chatState.asStateFlow()
 
+    private val auth = FirebaseAuth.getInstance()
+    private val db = Firebase.firestore
+
+    private val _userName = MutableStateFlow("")
+    val userName = _userName.asStateFlow()
     init {
-        // AI'nin kendini tanıtması
+        fetchUserName()
+    }
+
+    private fun fetchUserName() {
+        val userId = auth.currentUser?.uid
+        if (userId != null) {
+            viewModelScope.launch {
+                db.collection("users").document(userId).get()
+                    .addOnSuccessListener { document ->
+                        if (document != null && document.exists()) {
+                            _userName.value = document.getString("username") ?: "User"
+                            println("username is ${_userName.value}")
+
+                            // Kullanıcı adı alındıktan sonra Chat oluştur
+                            createInitialChat()
+                        }
+                    }
+            }
+        }
+    }
+
+    private fun createInitialChat() {
         _chatState.update { currentState ->
             currentState.copy(
                 chatList = currentState.chatList.toMutableList().apply {
-                    add(Chat("Hello! I am Your Food Assistant . Before we start, what is your name?", null, Date(), false))
+                    add(
+                        Chat(
+                            "Hello ${userName.value}, I am Your Food Assistant. Before we start, what is your name?",
+                            null,
+                            Date(),
+                            false
+                        )
+                    )
+                    println("your userName: ${userName.value}")
                 }
             )
         }
     }
+
 
     fun onEvent(event: ChatUIEvent) {
         when (event) {

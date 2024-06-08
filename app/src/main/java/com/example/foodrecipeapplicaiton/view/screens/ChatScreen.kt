@@ -59,14 +59,6 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
-import com.example.foodrecipeapplicaiton.ui.theme.ChatMessageColor
-import com.example.foodrecipeapplicaiton.ui.theme.PlaceHolderColor
-import com.example.foodrecipeapplicaiton.ui.theme.PlaceHolderColorDark
-import com.example.foodrecipeapplicaiton.ui.theme.TextFieldBackgroundColor
-import com.example.foodrecipeapplicaiton.ui.theme.TextFieldBackgroundColorDark
-import com.example.foodrecipeapplicaiton.ui.theme.TopAppBarColor
-import com.example.foodrecipeapplicaiton.ui.theme.TopAppBarColorDark
-import com.example.foodrecipeapplicaiton.ui.theme.TopBarTextColor
 import com.example.foodrecipeapplicaiton.view.components.ModelChatItem
 import com.example.foodrecipeapplicaiton.view.components.ModelChatTypingIndicator
 import com.example.foodrecipeapplicaiton.view.components.UserChatItem
@@ -96,9 +88,12 @@ fun ChatScreen(
 
 
     // Mesaj eklediğinde otomatik olarak en altına kaydır
-    LaunchedEffect(chatState.chatList) {
-        lazyListState.scrollToItem(chatState.chatList.size - 1)
+    if (chatState.chatList.isNotEmpty()) {
+        LaunchedEffect(chatState.chatList) {
+            lazyListState.scrollToItem(chatState.chatList.size - 1)
+        }
     }
+
 
     Column(
         modifier = Modifier

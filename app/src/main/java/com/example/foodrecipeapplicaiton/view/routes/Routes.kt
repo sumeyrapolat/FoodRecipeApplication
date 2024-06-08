@@ -9,6 +9,7 @@ object Routes {
     const val DETAIL_SCREEN = "detail_screen"
     const val FAVORITE_SCREEN = "favorites"
     const val CHAT_SCREEN = "chat_screen"
+    const val PROFILE_SCREEN = "profile_screen"
 
 
     fun mainRoute(category: String): String = "main/$category"

@@ -83,7 +83,7 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel = v
                     password = password,
                     onSuccess = {
                         Log.i("Login", "Success")
-                        navController.navigate("main")
+                        navController.navigate(Routes.MAIN)
                     },
                     onFailure = { Log.e("Login", "Error: ${it.message}") }
                 )

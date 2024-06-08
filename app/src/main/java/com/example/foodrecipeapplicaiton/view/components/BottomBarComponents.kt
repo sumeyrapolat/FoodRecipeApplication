@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
-
 @Composable
 fun BottomBar(navController: NavController, bottomNavItems: List<BottomNavItem>, onItemClick: (String) -> Unit) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -48,7 +47,8 @@ fun BottomBar(navController: NavController, bottomNavItems: List<BottomNavItem>,
                     onClick = {
                         if (currentRoute != item.route) {
                             onItemClick(item.route)
-                        }                    },
+                        }
+                    },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = Color.Black,
                         unselectedIconColor = Color.White,
@@ -60,10 +60,9 @@ fun BottomBar(navController: NavController, bottomNavItems: List<BottomNavItem>,
     }
 }
 
-
 data class BottomNavItem(
     val route: String,
     val icon: ImageVector,
     val label: String,
-    val onClick: () -> Unit // Tıklama işlevi
+    val onClick: () -> Unit
 )

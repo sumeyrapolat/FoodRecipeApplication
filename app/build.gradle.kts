@@ -134,7 +134,8 @@ dependencies {
     //gemini api
     implementation(libs.gemini.api)
 
-
+    // animation
+    implementation(libs.androidx.animation)
 
 
 

@@ -35,20 +35,21 @@ import com.example.foodrecipeapplicaiton.view.components.BottomBar
 import com.example.foodrecipeapplicaiton.view.components.BottomNavItem
 import com.example.foodrecipeapplicaiton.view.navigation.AppNavHost
 import com.example.foodrecipeapplicaiton.view.routes.Routes
+import com.example.foodrecipeapplicaiton.view.screens.ProfileCard
 import com.example.foodrecipeapplicaiton.viewmodel.RecipeViewModel
 import com.example.foodrecipeapplicaiton.viewmodel.RecipeViewModelFactory
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class MainActivity : ComponentActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,46 +63,21 @@ class MainActivity : ComponentActivity() {
                 .build()
         )
 
-        val signInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-            val account = task.result
-            if (account != null) {
-                val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-                auth.signInWithCredential(credential)
-                    .addOnCompleteListener(this) { authResult ->
-                        if (authResult.isSuccessful) {
-                            setContent {
-                                FoodRecipeApplicaitonTheme(darkTheme = isSystemInDarkTheme()) {
-                                    val recipeViewModel: RecipeViewModel = viewModel(factory = RecipeViewModelFactory(
-                                        RecipeRepository(RetrofitClient.recipeApiService)
-                                    ))
-                                    MainContent(startDestination = Routes.MAIN, recipeViewModel = recipeViewModel)
-                                }
-                            }
-                        } else {
-                            // Handle sign-in error
-                        }
-                    }
-            }
-        }
-
-        val startDestination = if (auth.currentUser != null) Routes.MAIN else Routes.LOGIN
+        val startDestination = Routes.MAIN
 
         setContent {
             FoodRecipeApplicaitonTheme(darkTheme = isSystemInDarkTheme()) {
                 val recipeViewModel: RecipeViewModel = viewModel(factory = RecipeViewModelFactory(
                     RecipeRepository(RetrofitClient.recipeApiService)
                 ))
-                MainContent(startDestination = startDestination, recipeViewModel = recipeViewModel)
+                MainContent(recipeViewModel = recipeViewModel, startDestination = startDestination)
             }
         }
     }
 }
 
-
 @Composable
-private fun MainContent(startDestination: String, recipeViewModel: RecipeViewModel) {
-
+private fun MainContent(recipeViewModel: RecipeViewModel, startDestination: String) {
     val darkTheme = isSystemInDarkTheme()
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -112,8 +88,6 @@ private fun MainContent(startDestination: String, recipeViewModel: RecipeViewMod
             launchSingleTop = true
         }
     }
-
-
     val uriState = remember { MutableStateFlow("") }
 
     val imagePicker =
@@ -123,9 +97,6 @@ private fun MainContent(startDestination: String, recipeViewModel: RecipeViewMod
             }
         }
 
-
-
-
     val paddingValues = PaddingValues(
         top = if (currentRoute == Routes.LOGIN || currentRoute == Routes.SIGN_UP) 0.dp else 16.dp,
         bottom = 0.dp,
@@ -133,6 +104,22 @@ private fun MainContent(startDestination: String, recipeViewModel: RecipeViewMod
         end = 0.dp
     )
 
+    val auth = FirebaseAuth.getInstance()
+    val db = Firebase.firestore
+
+    var userName by remember { mutableStateOf("User") }
+
+    val userId = auth.currentUser?.uid
+    if (userId != null) {
+        LaunchedEffect(userId) {
+            db.collection("users").document(userId).get()
+                .addOnSuccessListener { document ->
+                    if (document != null && document.exists()) {
+                        userName = document.getString("username") ?: "User"
+                    }
+                }
+        }
+    }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -162,7 +149,7 @@ private fun MainContent(startDestination: String, recipeViewModel: RecipeViewMod
                         BottomNavItem(Routes.FAVORITE_SCREEN, Icons.Filled.Favorite, "favorites", onClick = { onItemClick(Routes.FAVORITE_SCREEN) }),
                         BottomNavItem(Routes.CHAT_SCREEN, Icons.Filled.QuestionAnswer, "chat_screen", onClick = { onItemClick(Routes.CHAT_SCREEN) }),
                         BottomNavItem(Routes.MAIN, Icons.Filled.Notifications, "main/{category}", onClick = { onItemClick(Routes.MAIN) }),
-                        BottomNavItem(Routes.MAIN, Icons.Filled.Person2, "main/{category}", onClick = { onItemClick(Routes.MAIN) })
+                        BottomNavItem(Routes.PROFILE_SCREEN, Icons.Filled.Person2, "main/{category}", onClick = { onItemClick(Routes.PROFILE_SCREEN) })
                     )
 
                     BottomBar(navController = navController, bottomNavItems = bottomNavItems, onItemClick = onItemClick)
@@ -172,9 +159,19 @@ private fun MainContent(startDestination: String, recipeViewModel: RecipeViewMod
             Box(
                 modifier = Modifier.padding(contentPadding)
             ) {
-                AppNavHost(navController = navController, recipeViewModel = recipeViewModel, imagePicker = imagePicker, paddingValues = paddingValues, uriState = uriState)
+                AppNavHost(navController = navController, recipeViewModel = recipeViewModel, imagePicker = imagePicker, paddingValues = paddingValues, uriState = uriState, mainActivity = MainActivity())
+
+                if (currentRoute == Routes.PROFILE_SCREEN) {
+                    ProfileCard(
+                        userEmail = auth.currentUser!!.email.toString(),
+                        username = userName,
+                        onLogout = {
+                            auth.signOut()
+                            navController.navigate(Routes.LOGIN)
+                        }
+                    )
+                }
             }
         }
     }
-
 }
