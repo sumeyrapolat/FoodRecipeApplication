@@ -1,4 +1,4 @@
-package com.example.foodrecipeapplicaiton.view.splash
+package com.example.foodrecipeapplicaiton.ui.view.splash
 
 
 import androidx.compose.foundation.Image

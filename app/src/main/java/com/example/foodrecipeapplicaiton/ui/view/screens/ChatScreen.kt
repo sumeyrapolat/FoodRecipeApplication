@@ -1,4 +1,4 @@
-package com.example.foodrecipeapplicaiton.view.screens
+package com.example.foodrecipeapplicaiton.ui.view.screens
 
 import android.graphics.Bitmap
 import androidx.activity.result.ActivityResultLauncher

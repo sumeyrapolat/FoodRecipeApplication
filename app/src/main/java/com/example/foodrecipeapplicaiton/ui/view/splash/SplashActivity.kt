@@ -1,4 +1,4 @@
-package com.example.foodrecipeapplicaiton.view.splash
+package com.example.foodrecipeapplicaiton.ui.view.splash
 
 import android.content.Intent
 import android.os.Bundle

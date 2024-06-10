@@ -9,14 +9,22 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.Flow
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class RecipeViewModel(private val repository: RecipeRepository) : ViewModel() {
+@HiltViewModel
+class RecipeViewModel @Inject constructor(
+    private val repository: RecipeRepository
+) : ViewModel() {
 
     private val _recipes = MutableStateFlow<List<Recipe>>(emptyList())
     val recipes: StateFlow<List<Recipe>> = _recipes
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
+
+    private val _selectedRecipe = MutableStateFlow<Recipe?>(null)
+    val selectedRecipe: StateFlow<Recipe?> = _selectedRecipe
 
     val favoriteRecipes: Flow<List<FavoriteRecipe>> = repository.getFavoriteRecipes()
 
@@ -34,14 +42,23 @@ class RecipeViewModel(private val repository: RecipeRepository) : ViewModel() {
 
     fun fetchRecipes(apiKey: String, number: Int, category: String? = null) {
         viewModelScope.launch {
-            _isLoading.value = true // Yükleme başladığında isLoading durumunu true yap
+            _isLoading.value = true
             val allRecipes = repository.getRandomRecipes(apiKey, number)
             _recipes.value = if (category.isNullOrEmpty()) {
                 allRecipes
             } else {
                 filterRecipesByCategory(allRecipes, category)
             }
-            _isLoading.value = false // Yükleme tamamlandığında isLoading durumunu false yap
+            _isLoading.value = false
+        }
+    }
+
+    fun fetchRecipeDetails(recipeId: Int, apiKey: String) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            val recipeDetails = repository.getRecipeDetails(recipeId, apiKey)
+            _selectedRecipe.value = recipeDetails
+            _isLoading.value = false
         }
     }
 

@@ -1,4 +1,4 @@
-package com.example.foodrecipeapplicaiton.view.components
+package com.example.foodrecipeapplicaiton.ui.view.components
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image

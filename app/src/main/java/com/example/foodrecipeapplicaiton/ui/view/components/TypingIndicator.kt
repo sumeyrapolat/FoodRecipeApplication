@@ -1,4 +1,4 @@
-package com.example.foodrecipeapplicaiton.view.components
+package com.example.foodrecipeapplicaiton.ui.view.components
 
 
 import androidx.compose.animation.core.RepeatMode

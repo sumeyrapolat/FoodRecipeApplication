@@ -1,6 +1,5 @@
-package com.example.foodrecipeapplicaiton.view.components
+package com.example.foodrecipeapplicaiton.ui.view.components
 
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -9,11 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,11 +21,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.example.foodrecipeapplicaiton.R
-import com.example.foodrecipeapplicaiton.room.AppDatabase
 import com.example.foodrecipeapplicaiton.room.FavoriteRecipe
-import androidx.compose.runtime.rememberCoroutineScope
+import com.example.foodrecipeapplicaiton.room.FavoriteRecipeDao
+import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
-
 
 @Composable
 fun RecipeCardAdd(
@@ -42,10 +36,10 @@ fun RecipeCardAdd(
     readyInMinutes: Int,
     imageUrl: String,
     onClick: () -> Unit,
-    context: Context
+    favoriteRecipeDao: FavoriteRecipeDao
 ) {
     var isFavorite by remember { mutableStateOf(false) }
-    val coroutineScope = rememberCoroutineScope() // Add this line to remember the coroutine scope
+    val coroutineScope = rememberCoroutineScope()
 
     Card(
         modifier = Modifier
@@ -92,20 +86,17 @@ fun RecipeCardAdd(
                         .padding(end = if (title.length > 30) 0.dp else 8.dp)
                         .clickable {
                             isFavorite = !isFavorite
-                            coroutineScope.launch { // Launch a coroutine for database operations
-                                val db = AppDatabase.getInstance(context)
-                                val favoriteRecipeDao = db.favoriteRecipeDao()
+                            coroutineScope.launch {
                                 if (isFavorite) {
                                     favoriteRecipeDao.insertFavoriteRecipe(
                                         FavoriteRecipe(
-                                            id = id, // Kullanıcı tarafından belirtilen benzersiz kimlik
+                                            id = id,
                                             title = title,
                                             ingredients = ingredients,
                                             imageUrl = imageUrl,
                                             instructions = instructions,
                                             servings = servings,
                                             readyInMinutes = readyInMinutes
-
                                         )
                                     )
                                     //Toast.makeText(context, "Recipe added to favorites", Toast.LENGTH_SHORT).show()

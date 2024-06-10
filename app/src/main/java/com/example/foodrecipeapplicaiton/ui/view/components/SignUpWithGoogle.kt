@@ -1,4 +1,4 @@
-package com.example.foodrecipeapplicaiton.view.components
+package com.example.foodrecipeapplicaiton.ui.view.components
 
 import android.util.Log
 import androidx.compose.animation.animateContentSize

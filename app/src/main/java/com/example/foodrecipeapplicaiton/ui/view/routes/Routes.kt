@@ -1,4 +1,4 @@
-package com.example.foodrecipeapplicaiton.view.routes
+package com.example.foodrecipeapplicaiton.ui.view.routes
 
 
 object Routes {

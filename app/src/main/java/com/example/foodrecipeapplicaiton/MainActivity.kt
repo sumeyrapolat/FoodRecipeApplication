@@ -7,50 +7,65 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person2
 import androidx.compose.material.icons.filled.QuestionAnswer
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.foodrecipeapplicaiton.R
-import com.example.foodrecipeapplicaiton.api.service.RetrofitClient
-import com.example.foodrecipeapplicaiton.repository.RecipeRepository
-import com.example.foodrecipeapplicaiton.room.AppDatabase
 import com.example.foodrecipeapplicaiton.ui.theme.FoodRecipeApplicaitonTheme
+import com.example.foodrecipeapplicaiton.view.navigation.AppNavHost
+import com.example.foodrecipeapplicaiton.viewmodel.RecipeViewModel
+import com.example.foodrecipeapplicaiton.room.FavoriteRecipeDao
 import com.example.foodrecipeapplicaiton.ui.theme.TopAppBarColor
 import com.example.foodrecipeapplicaiton.ui.theme.TopAppBarColorDark
 import com.example.foodrecipeapplicaiton.ui.theme.TopBarTextColor
 import com.example.foodrecipeapplicaiton.ui.theme.TopBarTextColorDark
 import com.example.foodrecipeapplicaiton.view.components.BottomBar
 import com.example.foodrecipeapplicaiton.view.components.BottomNavItem
-import com.example.foodrecipeapplicaiton.view.navigation.AppNavHost
 import com.example.foodrecipeapplicaiton.view.routes.Routes
 import com.example.foodrecipeapplicaiton.view.screens.ProfileCard
-import com.example.foodrecipeapplicaiton.viewmodel.RecipeViewModel
-import com.example.foodrecipeapplicaiton.viewmodel.RecipeViewModelFactory
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.MutableStateFlow
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
+
+    @Inject
+    lateinit var favoriteRecipeDao: FavoriteRecipeDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,19 +83,15 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             FoodRecipeApplicaitonTheme(darkTheme = isSystemInDarkTheme()) {
-                // Veritabanı nesnesini başlatın
-                val database = AppDatabase.getInstance(this)
-                val recipeViewModel: RecipeViewModel = viewModel(factory = RecipeViewModelFactory(
-                    RecipeRepository(RetrofitClient.recipeApiService, database) // Database parametresini de sağlayın
-                ))
-                MainContent(recipeViewModel = recipeViewModel, startDestination = startDestination)
+                val recipeViewModel: RecipeViewModel = hiltViewModel()
+                MainContent(recipeViewModel = recipeViewModel, favoriteRecipeDao = favoriteRecipeDao, startDestination = startDestination)
             }
         }
     }
 }
 
 @Composable
-private fun MainContent(recipeViewModel: RecipeViewModel, startDestination: String) {
+private fun MainContent(recipeViewModel: RecipeViewModel, favoriteRecipeDao: FavoriteRecipeDao, startDestination: String) {
     val darkTheme = isSystemInDarkTheme()
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -93,12 +104,11 @@ private fun MainContent(recipeViewModel: RecipeViewModel, startDestination: Stri
     }
     val uriState = remember { MutableStateFlow("") }
 
-    val imagePicker =
-        rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia()) { uri ->
-            uri?.let {
-                uriState.value = uri.toString()
-            }
+    val imagePicker = rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia()) { uri ->
+        uri?.let {
+            uriState.value = uri.toString()
         }
+    }
 
     val paddingValues = PaddingValues(
         top = if (currentRoute == Routes.LOGIN || currentRoute == Routes.SIGN_UP) 0.dp else 16.dp,
@@ -162,7 +172,7 @@ private fun MainContent(recipeViewModel: RecipeViewModel, startDestination: Stri
             Box(
                 modifier = Modifier.padding(contentPadding)
             ) {
-                AppNavHost(navController = navController, recipeViewModel = recipeViewModel, imagePicker = imagePicker, paddingValues = paddingValues, uriState = uriState, mainActivity = MainActivity())
+                AppNavHost(navController = navController, recipeViewModel = recipeViewModel, favoriteRecipeDao = favoriteRecipeDao, imagePicker = imagePicker, paddingValues = paddingValues, uriState = uriState)
 
                 if (currentRoute == Routes.PROFILE_SCREEN) {
                     ProfileCard(

@@ -1,4 +1,4 @@
-package com.example.foodrecipeapplicaiton.view.screens
+package com.example.foodrecipeapplicaiton.ui.view.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
