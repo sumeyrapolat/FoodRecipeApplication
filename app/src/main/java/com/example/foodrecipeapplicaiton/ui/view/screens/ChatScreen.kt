@@ -59,10 +59,10 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
-import com.example.foodrecipeapplicaiton.view.components.ModelChatItem
-import com.example.foodrecipeapplicaiton.view.components.ModelChatTypingIndicator
-import com.example.foodrecipeapplicaiton.view.components.UserChatItem
-import com.example.foodrecipeapplicaiton.view.components.UserChatTypingIndicator
+import com.example.foodrecipeapplicaiton.ui.view.components.ModelChatItem
+import com.example.foodrecipeapplicaiton.ui.view.components.ModelChatTypingIndicator
+import com.example.foodrecipeapplicaiton.ui.view.components.UserChatItem
+import com.example.foodrecipeapplicaiton.ui.view.components.UserChatTypingIndicator
 import com.example.foodrecipeapplicaiton.viewmodel.ChatViewModel
 import com.example.foodrecipeapplicaiton.viewmodel.event.ChatUIEvent
 import kotlinx.coroutines.flow.MutableStateFlow

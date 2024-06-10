@@ -1,5 +1,6 @@
 package com.example.foodrecipeapplicaiton.repository
 
+import android.util.Log
 import com.example.foodrecipeapplicaiton.api.models.Recipe
 import com.example.foodrecipeapplicaiton.api.service.RecipeApiService
 import com.example.foodrecipeapplicaiton.room.AppDatabase
@@ -23,6 +24,13 @@ class RecipeRepository @Inject constructor(
         return apiService.getRecipeDetails(recipeId, apiKey)
     }
 
+
+    suspend fun searchRecipes(query: String, apiKey: String): List<Recipe> {
+        val allRecipes = getRandomRecipes(apiKey, 10000) // Büyük bir sayı vererek tüm tarifleri al
+        val filteredRecipes = allRecipes.filter { it.title.contains(query, ignoreCase = true) }
+        Log.d("RecipeRepository", "Search results for query '$query': ${filteredRecipes.size} recipes found")
+        return filteredRecipes
+    }
 
     fun getFavoriteRecipes(): Flow<List<FavoriteRecipe>> {
         return database.favoriteRecipeDao().getAllFavoriteRecipes()

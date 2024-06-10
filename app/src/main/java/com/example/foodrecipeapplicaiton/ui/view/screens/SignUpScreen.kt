@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,18 +20,20 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.foodrecipeapplicaiton.R
+import com.example.foodrecipeapplicaiton.ui.view.components.PasswordTextField
+import com.example.foodrecipeapplicaiton.ui.view.components.SignUpButton
+import com.example.foodrecipeapplicaiton.ui.view.components.SignUpWithGoogle
+import com.example.foodrecipeapplicaiton.ui.view.components.UserEmailTextField
+import com.example.foodrecipeapplicaiton.ui.view.components.UserNameTextField
+import com.example.foodrecipeapplicaiton.ui.view.routes.Routes
 import com.example.foodrecipeapplicaiton.viewmodel.SignUpViewModel
-import com.example.foodrecipeapplicaiton.view.components.PasswordTextField
-import com.example.foodrecipeapplicaiton.view.components.SignUpButton
-import com.example.foodrecipeapplicaiton.view.components.SignUpWithGoogle
-import com.example.foodrecipeapplicaiton.view.components.UserEmailTextField
-import com.example.foodrecipeapplicaiton.view.components.UserNameTextField
-import com.example.foodrecipeapplicaiton.view.routes.Routes
 
 
 @Composable
 fun SignUpScreen(navController: NavController, signUpViewModel: SignUpViewModel = viewModel()) {
     val darkTheme = isSystemInDarkTheme()
+    val keyboardController = LocalSoftwareKeyboardController.current
+
 
     var userName by remember { mutableStateOf("") }
     var userEmail by remember { mutableStateOf("") }
@@ -69,6 +72,7 @@ fun SignUpScreen(navController: NavController, signUpViewModel: SignUpViewModel 
 
         SignUpButton(
             onClick = {
+                keyboardController?.hide()
                 signUpViewModel.signUpUser(
                     email = userEmail,
                     username = userName,

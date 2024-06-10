@@ -1,5 +1,6 @@
 package com.example.foodrecipeapplicaiton.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.foodrecipeapplicaiton.api.models.Recipe
@@ -19,6 +20,9 @@ class RecipeViewModel @Inject constructor(
 
     private val _recipes = MutableStateFlow<List<Recipe>>(emptyList())
     val recipes: StateFlow<List<Recipe>> = _recipes
+
+    private val _searchResults = MutableStateFlow<List<Recipe>>(emptyList())
+    val searchResults: StateFlow<List<Recipe>> = _searchResults
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
@@ -53,6 +57,15 @@ class RecipeViewModel @Inject constructor(
         }
     }
 
+    fun fetchMoreRecipes(apiKey: String, number: Int, category: String? = null) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            val moreRecipes = repository.getRandomRecipes(apiKey, number)
+            _recipes.value = _recipes.value + moreRecipes
+            _isLoading.value = false
+        }
+    }
+
     fun fetchRecipeDetails(recipeId: Int, apiKey: String) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -76,5 +89,21 @@ class RecipeViewModel @Inject constructor(
 
     fun getRecipeById(recipeId: Int): Recipe? {
         return recipes.value.find { it.id == recipeId }
+    }
+
+    fun searchRecipes(query: String, apiKey: String) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val searchResults = repository.searchRecipes(query, apiKey)
+                _searchResults.value = searchResults
+                Log.d("RecipeViewModel", "Search results updated: ${searchResults.size} recipes found")
+            } catch (e: Exception) {
+                _searchResults.value = emptyList()
+                e.printStackTrace()
+            } finally {
+                _isLoading.value = false
+            }
+        }
     }
 }

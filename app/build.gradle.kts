@@ -131,16 +131,6 @@ dependencies {
     //gemini api
     implementation(libs.gemini.api)
 
-
-
-
-
-
-
-
-
-
-
 }
 
 kapt {

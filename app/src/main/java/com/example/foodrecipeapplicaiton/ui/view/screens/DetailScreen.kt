@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.foodrecipeapplicaiton.R
-import com.example.foodrecipeapplicaiton.view.components.RecipeCardDetail
+import com.example.foodrecipeapplicaiton.ui.view.components.RecipeCardDetail
 import com.example.foodrecipeapplicaiton.viewmodel.RecipeViewModel
 
 @Composable

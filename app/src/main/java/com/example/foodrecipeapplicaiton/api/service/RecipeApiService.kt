@@ -12,16 +12,15 @@ interface RecipeApiService {
     @GET("recipes/random")
     suspend fun getRandomRecipes(@Query("apiKey") apiKey: String, @Query("number") number: Int): RecipeResponse
 
-    @GET("recipes/complexSearch")
-    suspend fun getRecipesByCategory(
-        @Query("apiKey") apiKey: String,
-        @Query("number") number: Int,
-        @Query("diet") category: String
-    ): RecipeResponse
-
     @GET("recipes/{id}/information")
     suspend fun getRecipeDetails(
         @Path("id") id: Int,
         @Query("apiKey") apiKey: String
     ): Recipe
+
+    @GET("recipes/complexSearch")
+    suspend fun searchRecipes(
+        @Query("query") query: String,
+        @Query("apiKey") apiKey: String
+    ): RecipeResponse
 }

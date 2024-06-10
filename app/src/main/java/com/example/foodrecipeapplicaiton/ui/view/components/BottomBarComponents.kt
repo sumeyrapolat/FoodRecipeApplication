@@ -23,10 +23,9 @@ fun BottomBar(navController: NavController, bottomNavItems: List<BottomNavItem>,
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(3.dp)
             .background(
                 color = Color.Black,
-                shape = RoundedCornerShape(32.dp)
+                shape = RoundedCornerShape(30.dp)
             )
     ) {
         NavigationBar(
