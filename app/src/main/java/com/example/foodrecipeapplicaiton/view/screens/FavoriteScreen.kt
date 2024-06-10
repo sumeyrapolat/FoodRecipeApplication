@@ -1,74 +1,108 @@
 package com.example.foodrecipeapplicaiton.view.screens
 
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.foodrecipeapplicaiton.R
-import com.example.foodrecipeapplicaiton.api.models.Recipe
-import com.example.foodrecipeapplicaiton.view.components.FavoriteRecipeCard
 import com.example.foodrecipeapplicaiton.viewmodel.RecipeViewModel
+import androidx.compose.ui.Alignment
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
+import com.example.foodrecipeapplicaiton.view.components.FavoriteRecipeCard
+import com.example.foodrecipeapplicaiton.view.routes.Routes
 
 @Composable
 fun FavoriteScreen(
     navController: NavController,
-    //viewModel: RecipeViewModel
+    viewModel: RecipeViewModel
 ) {
-   /* // Favori tariflerin listesini alın
-    val favoriteRecipes by viewModel.favoriteRecipes.collectAsState()
-
-    // Favori tariflerin detaylarına gitmek için işlev
-    val onRecipeClicked: (Recipe) -> Unit = { recipe ->
-        // Burada favori tarifin detaylarına gitmek için navController'ı kullanabilirsiniz
-        // Örneğin:
-        navController.navigate("detail/${recipe.id}")
-    }
-
-    // Favori tarifleri favorilerden kaldırmak için işlev
-    val onRemoveFromFavorites: (Recipe) -> Unit = { recipe ->
-        // Favori tarifleri listesinden tarifi kaldır
-        viewModel.removeFavoriteRecipe(recipe)
-    }
+    // Favori tariflerin yüklenmesi
+    val favoriteRecipes by viewModel.favoriteRecipes.collectAsState(initial = emptyList())
 
     // Favori tariflerin listelendiği kısmı oluşturun
-    Column(
-        modifier = Modifier.fillMaxSize()
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.padding(10.dp))
-
-        Text(text = "Favorite Recipes", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-
-        Spacer(modifier = Modifier.padding(10.dp))
-
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items (favoriteRecipes) { recipe ->
-                FavoriteRecipeCard(
-                    title = recipe.title,
-                    ingredients = recipe.extendedIngredients.joinToString(", "),
-                    imageUrl = recipe.image ?: if (isSystemInDarkTheme()) R.drawable.darknoimage.toString() else R.drawable.lightnoimage.toString(),
-                    onClick = { onRecipeClicked(recipe) },
-                    isFavorite = true,
-                    onFavoriteClicked = { onRemoveFromFavorites(recipe) }
+        item {
+            Column(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(3.dp)
+            ) {
+                Text(
+                    text = "Favorite Recipes",
+                    fontSize = 18.sp,
+                    textAlign = TextAlign.Center,
+                    color = Color.Black,
+                    maxLines = 1,
+                    modifier = Modifier.padding(vertical = 16.dp),
                 )
             }
         }
-    }*/
+
+        if (favoriteRecipes.isNotEmpty()) {
+            items(favoriteRecipes.size) { index ->
+                val recipe = favoriteRecipes[index]
+                FavoriteRecipeCard(
+                    id = recipe.id,
+                    title = recipe.title,
+                    ingredients = recipe.ingredients,
+                    imageUrl = recipe.imageUrl,
+                    onClick = {
+                        navController.navigate(Routes.favoriteDetailScreenRoute(recipe.id))
+                              },
+                    onDeleteClicked = {
+                        viewModel.removeFavoriteRecipe(recipe)
+                    }
+                )
+            }
+        } else {
+            item {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Card(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .clip(RoundedCornerShape(25.dp))
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+
+                            Text(
+                                text = "No favorite recipes found.",
+                                fontSize = 20.sp,
+                                textAlign = TextAlign.Center,
+                                color = Color.Black,
+                                maxLines = 1,
+                            )
+                        }
+                    }
+                }
+
+            }
+        }
+    }
 }

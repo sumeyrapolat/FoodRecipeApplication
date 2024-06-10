@@ -1,5 +1,6 @@
 package com.example.foodrecipeapplicaiton.view.screens
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -14,17 +15,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.foodrecipeapplicaiton.R
 import com.example.foodrecipeapplicaiton.api.key.Constants.API_KEY
 import com.example.foodrecipeapplicaiton.view.components.CategoryTabs
 import com.example.foodrecipeapplicaiton.view.components.RecipeCard
+import com.example.foodrecipeapplicaiton.view.components.RecipeCardAdd
 import com.example.foodrecipeapplicaiton.view.routes.Routes
 import com.example.foodrecipeapplicaiton.viewmodel.RecipeViewModel
 
 @Composable
-fun MainScreen(navController: NavController, recipeViewModel: RecipeViewModel) {
+fun MainScreen(navController: NavController, recipeViewModel: RecipeViewModel,context: Context) {
 
     val darkTheme = isSystemInDarkTheme()
     val recipes = recipeViewModel.recipes.collectAsState().value
@@ -46,16 +49,21 @@ fun MainScreen(navController: NavController, recipeViewModel: RecipeViewModel) {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(recipes) { recipe ->
-                RecipeCard(
+                RecipeCardAdd(
+                    id = recipe.id,
                     title = recipe.title,
                     ingredients = recipe.extendedIngredients.joinToString(", ") { it.name },
+                    instructions = recipe.instructions,
+                    servings = recipe.servings,
+                    readyInMinutes = recipe.readyInMinutes,
                     imageUrl = recipe.image ?: if (darkTheme) R.drawable.darknoimage.toString() else R.drawable.lightnoimage.toString(),
                     onClick = {
 
                         Log.d("MainScreen", "Recipe card clicked, navigating to detail screen...")
                         navController.navigate(Routes.detailScreenRoute(recipe.id))
 
-                    }
+                    },
+                    context = context
                 )
             }
         }

@@ -13,7 +13,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.HeartBroken
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,13 +36,13 @@ import com.example.foodrecipeapplicaiton.R
 
 @Composable
 fun FavoriteRecipeCard(
+    id:Int,
     title: String,
     ingredients: String,
     imageUrl: String,
     onClick: () -> Unit,
-    isFavorite: Boolean,
-    onFavoriteClicked: () -> Unit
-) {
+    onDeleteClicked: () -> Unit // Silme işlevini tetiklemek için bir lambda
+)  {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -79,18 +84,14 @@ fun FavoriteRecipeCard(
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                Box(
-                    modifier = Modifier.padding(end = if (title.length > 30) 0.dp else 8.dp)
-                        .clickable {
-                            onFavoriteClicked()
-                        }
+                IconButton(
+                    onClick = onDeleteClicked
                 ) {
                     Image(
-                        painter = painterResource(if (isFavorite) R.drawable.liked else R.drawable.like),
+                        painter = painterResource(R.drawable.liked),
                         contentDescription = "Favorite Icon",
                         modifier = Modifier.size(30.dp)
-                    )
-                }
+                    )                }
             }
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -105,3 +106,4 @@ fun FavoriteRecipeCard(
         }
     }
 }
+

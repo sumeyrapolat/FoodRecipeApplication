@@ -1,5 +1,7 @@
 package com.example.foodrecipeapplicaiton.view.components
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,17 +26,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.example.foodrecipeapplicaiton.R
-
+import com.example.foodrecipeapplicaiton.room.AppDatabase
+import com.example.foodrecipeapplicaiton.room.FavoriteRecipe
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 
 
 @Composable
-fun RecipeCard(
+fun RecipeCardAdd(
+    id: Int,
     title: String,
     ingredients: String,
+    instructions: String,
+    servings: Int,
+    readyInMinutes: Int,
     imageUrl: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    context: Context
 ) {
     var isFavorite by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope() // Add this line to remember the coroutine scope
 
     Card(
         modifier = Modifier
@@ -77,9 +88,42 @@ fun RecipeCard(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Box(
-                    modifier = Modifier.padding(end = if (title.length > 30) 0.dp else 8.dp)
+                    modifier = Modifier
+                        .padding(end = if (title.length > 30) 0.dp else 8.dp)
                         .clickable {
                             isFavorite = !isFavorite
+                            coroutineScope.launch { // Launch a coroutine for database operations
+                                val db = AppDatabase.getInstance(context)
+                                val favoriteRecipeDao = db.favoriteRecipeDao()
+                                if (isFavorite) {
+                                    favoriteRecipeDao.insertFavoriteRecipe(
+                                        FavoriteRecipe(
+                                            id = id, // Kullanıcı tarafından belirtilen benzersiz kimlik
+                                            title = title,
+                                            ingredients = ingredients,
+                                            imageUrl = imageUrl,
+                                            instructions = instructions,
+                                            servings = servings,
+                                            readyInMinutes = readyInMinutes
+
+                                        )
+                                    )
+                                    //Toast.makeText(context, "Recipe added to favorites", Toast.LENGTH_SHORT).show()
+                                } else {
+                                    favoriteRecipeDao.deleteFavoriteRecipe(
+                                        FavoriteRecipe(
+                                            id = id,
+                                            title = title,
+                                            ingredients = ingredients,
+                                            imageUrl = imageUrl,
+                                            instructions = instructions,
+                                            servings = servings,
+                                            readyInMinutes = readyInMinutes
+                                        )
+                                    )
+                                    //Toast.makeText(context, "Recipe removed from favorites", Toast.LENGTH_SHORT).show()
+                                }
+                            }
                         }
                 ) {
                     Image(
@@ -88,6 +132,7 @@ fun RecipeCard(
                         modifier = Modifier.size(30.dp)
                     )
                 }
+
             }
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -112,5 +157,3 @@ fun RecipeCard(
         }
     }
 }
-
-

@@ -5,8 +5,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -15,6 +13,7 @@ import com.example.foodrecipeapplicaiton.MainActivity
 import com.example.foodrecipeapplicaiton.view.routes.Routes
 import com.example.foodrecipeapplicaiton.view.screens.ChatScreen
 import com.example.foodrecipeapplicaiton.view.screens.DetailScreen
+import com.example.foodrecipeapplicaiton.view.screens.FavoriteDetail
 import com.example.foodrecipeapplicaiton.view.screens.FavoriteScreen
 import com.example.foodrecipeapplicaiton.view.screens.LoginScreen
 import com.example.foodrecipeapplicaiton.view.screens.MainScreen
@@ -49,10 +48,10 @@ fun AppNavHost(
         }
         composable(Routes.MAIN) {
             Log.d("AppNavHost", "Navigating to MAIN screen")
-            MainScreen(navController = navController, recipeViewModel = recipeViewModel)
+            MainScreen(navController = navController, recipeViewModel = recipeViewModel, context = mainActivity)
         }
         composable(Routes.FAVORITE_SCREEN) {
-            //FavoriteScreen(navController = navController, viewModel = recipeViewModel)
+            FavoriteScreen(navController = navController, viewModel = recipeViewModel)
         }
 
         composable(Routes.CHAT_SCREEN) {
@@ -89,6 +88,7 @@ fun AppNavHost(
                 }
             }
         }
+        
         composable("${Routes.DETAIL_SCREEN}/{recipeId}") { backStackEntry ->
             val recipeId = backStackEntry.arguments?.getString("recipeId")?.toIntOrNull()
             if (recipeId != null) {
@@ -102,5 +102,14 @@ fun AppNavHost(
                 Log.e("AppNavHost", "recipeId is null, arguments: ${backStackEntry.arguments}")
             }
         }
-    }
+
+        composable("${Routes.FAVORITE_DETAIL_SCREEN}/{recipeId}") { backStackEntry ->
+            val recipeId = backStackEntry.arguments?.getString("recipeId")?.toIntOrNull()
+            if (recipeId != null) {
+                Log.d("AppNavHost", "Navigating to DETAIL screen with recipeId: $recipeId")
+                FavoriteDetail(recipeId= recipeId,navController = navController, viewModel = recipeViewModel)
+            } else {
+                Log.e("AppNavHost", "recipeId is null, arguments: ${backStackEntry.arguments}")
+            }
+        }    }
 }

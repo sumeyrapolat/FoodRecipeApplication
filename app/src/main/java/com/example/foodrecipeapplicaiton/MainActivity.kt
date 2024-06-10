@@ -26,6 +26,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.foodrecipeapplicaiton.R
 import com.example.foodrecipeapplicaiton.api.service.RetrofitClient
 import com.example.foodrecipeapplicaiton.repository.RecipeRepository
+import com.example.foodrecipeapplicaiton.room.AppDatabase
 import com.example.foodrecipeapplicaiton.ui.theme.FoodRecipeApplicaitonTheme
 import com.example.foodrecipeapplicaiton.ui.theme.TopAppBarColor
 import com.example.foodrecipeapplicaiton.ui.theme.TopAppBarColorDark
@@ -67,8 +68,10 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             FoodRecipeApplicaitonTheme(darkTheme = isSystemInDarkTheme()) {
+                // Veritabanı nesnesini başlatın
+                val database = AppDatabase.getInstance(this)
                 val recipeViewModel: RecipeViewModel = viewModel(factory = RecipeViewModelFactory(
-                    RecipeRepository(RetrofitClient.recipeApiService)
+                    RecipeRepository(RetrofitClient.recipeApiService, database) // Database parametresini de sağlayın
                 ))
                 MainContent(recipeViewModel = recipeViewModel, startDestination = startDestination)
             }

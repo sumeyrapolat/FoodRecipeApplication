@@ -4,40 +4,44 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.foodrecipeapplicaiton.api.models.Recipe
 import com.example.foodrecipeapplicaiton.repository.RecipeRepository
+import com.example.foodrecipeapplicaiton.room.FavoriteRecipe
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-
+import kotlinx.coroutines.flow.Flow
 
 class RecipeViewModel(private val repository: RecipeRepository) : ViewModel() {
 
     private val _recipes = MutableStateFlow<List<Recipe>>(emptyList())
     val recipes: StateFlow<List<Recipe>> = _recipes
 
-    // Favori tarifleri tutacak StateFlow
-    private val _favoriteRecipes = MutableStateFlow<List<Recipe>>(emptyList())
-    val favoriteRecipes: StateFlow<List<Recipe>> = _favoriteRecipes
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
 
-    // Favori tarif ekleme işlevi
-    fun addFavoriteRecipe(recipe: Recipe) {
-        val updatedList = _favoriteRecipes.value.toMutableList().apply { add(recipe) }
-        _favoriteRecipes.value = updatedList
+    val favoriteRecipes: Flow<List<FavoriteRecipe>> = repository.getFavoriteRecipes()
+
+    fun addFavoriteRecipe(recipe: FavoriteRecipe) {
+        viewModelScope.launch {
+            repository.addFavoriteRecipe(recipe)
+        }
     }
 
-    // Favori tarif çıkarma işlevi
-    fun removeFavoriteRecipe(recipe: Recipe) {
-        val updatedList = _favoriteRecipes.value.toMutableList().apply { remove(recipe) }
-        _favoriteRecipes.value = updatedList
+    fun removeFavoriteRecipe(recipe: FavoriteRecipe) {
+        viewModelScope.launch {
+            repository.removeFavoriteRecipe(recipe)
+        }
     }
 
     fun fetchRecipes(apiKey: String, number: Int, category: String? = null) {
         viewModelScope.launch {
+            _isLoading.value = true // Yükleme başladığında isLoading durumunu true yap
             val allRecipes = repository.getRandomRecipes(apiKey, number)
             _recipes.value = if (category.isNullOrEmpty()) {
                 allRecipes
             } else {
                 filterRecipesByCategory(allRecipes, category)
             }
+            _isLoading.value = false // Yükleme tamamlandığında isLoading durumunu false yap
         }
     }
 

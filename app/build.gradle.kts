@@ -96,9 +96,6 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
 
-    // Lottie
-    implementation(libs.lottie.compose)
-
 
     // Swipe Refresh
     implementation(libs.accompanist.swiperefresh)
@@ -134,8 +131,7 @@ dependencies {
     //gemini api
     implementation(libs.gemini.api)
 
-    // animation
-    implementation(libs.androidx.animation)
+
 
 
 
