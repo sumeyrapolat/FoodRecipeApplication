@@ -55,15 +55,43 @@ fun MainScreen(navController: NavController, favoriteRecipeDao: FavoriteRecipeDa
 
         Spacer(modifier = Modifier.padding(2.dp))
 
-        SearchBar(
-            state = remember { mutableStateOf(searchQuery) },
-            onSearch = { query ->
-                Log.d("MainScreen", "Search query: $query")
-                searchQuery = TextFieldValue(query)
-                recipeViewModel.searchRecipes(query, API_KEY)
-            },
-            modifier = Modifier.padding(16.dp)
-        )
+        LazyColumn(
+            state = listState,
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            item {
+                SearchBar(
+                    state = remember { mutableStateOf(searchQuery) },
+                    onSearch = { query ->
+                        Log.d("MainScreen", "Search query: $query")
+                        searchQuery = TextFieldValue(query)
+                        recipeViewModel.searchRecipes(query, API_KEY)
+                    },
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+
+            val displayedRecipes = if (searchQuery.text.isEmpty()) recipes else searchResults
+            Log.d("MainScreen", "Displayed recipes count: ${displayedRecipes.size}")
+            items(displayedRecipes) { recipe ->
+                RecipeCardAdd(
+                    id = recipe.id,
+                    title = recipe.title,
+                    ingredients = recipe.extendedIngredients.joinToString(", ") { it.name },
+                    instructions = recipe.instructions,
+                    servings = recipe.servings,
+                    readyInMinutes = recipe.readyInMinutes,
+                    imageUrl = recipe.image ?: if (darkTheme) R.drawable.darknoimage.toString() else R.drawable.lightnoimage.toString(),
+                    onClick = {
+                        Log.d("MainScreen", "Recipe card clicked, navigating to detail screen...")
+                        navController.navigate(Routes.detailScreenRoute(recipe.id))
+                    },
+                    favoriteRecipeDao = favoriteRecipeDao
+                )
+            }
+        }
 
         if (isLoading) {
             Box(
@@ -71,32 +99,6 @@ fun MainScreen(navController: NavController, favoriteRecipeDao: FavoriteRecipeDa
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator()
-            }
-        } else {
-            LazyColumn(
-                state = listState,
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                val displayedRecipes = if (searchQuery.text.isEmpty()) recipes else searchResults
-                Log.d("MainScreen", "Displayed recipes count: ${displayedRecipes.size}")
-                items(displayedRecipes) { recipe ->
-                    RecipeCardAdd(
-                        id = recipe.id,
-                        title = recipe.title,
-                        ingredients = recipe.extendedIngredients.joinToString(", ") { it.name },
-                        instructions = recipe.instructions,
-                        servings = recipe.servings,
-                        readyInMinutes = recipe.readyInMinutes,
-                        imageUrl = recipe.image ?: if (darkTheme) R.drawable.darknoimage.toString() else R.drawable.lightnoimage.toString(),
-                        onClick = {
-                            Log.d("MainScreen", "Recipe card clicked, navigating to detail screen...")
-                            navController.navigate(Routes.detailScreenRoute(recipe.id))
-                        },
-                        favoriteRecipeDao = favoriteRecipeDao
-                    )
-                }
             }
         }
     }
