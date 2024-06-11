@@ -41,7 +41,7 @@ fun FavoriteRecipeCard(
     ingredients: String,
     imageUrl: String,
     onClick: () -> Unit,
-    onDeleteClicked: () -> Unit // Silme işlevini tetiklemek için bir lambda
+    onDeleteClicked: () -> Unit
 )  {
     Card(
         modifier = Modifier
@@ -55,7 +55,6 @@ fun FavoriteRecipeCard(
                 .background(Color(0xFFF5F5F5))
                 .padding(16.dp)
         ) {
-            // Resmi göstermek için Image bileşenini kullanın
             Image(
                 painter = rememberImagePainter(imageUrl),
                 contentDescription = null,

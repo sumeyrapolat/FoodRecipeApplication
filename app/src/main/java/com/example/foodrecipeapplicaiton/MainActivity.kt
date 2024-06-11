@@ -40,6 +40,7 @@ import com.example.foodrecipeapplicaiton.ui.theme.TopBarTextColor
 import com.example.foodrecipeapplicaiton.ui.theme.TopBarTextColorDark
 import com.example.foodrecipeapplicaiton.ui.view.components.BottomBar
 import com.example.foodrecipeapplicaiton.ui.view.components.BottomNavItem
+import com.example.foodrecipeapplicaiton.ui.view.components.TopBar
 import com.example.foodrecipeapplicaiton.ui.view.navigation.AppNavHost
 import com.example.foodrecipeapplicaiton.ui.view.routes.Routes
 import com.example.foodrecipeapplicaiton.ui.view.screens.ProfileCard
@@ -112,6 +113,7 @@ private fun MainContent(recipeViewModel: RecipeViewModel, favoriteRecipeDao: Fav
 
     var userName by remember { mutableStateOf("User") }
 
+
     val userId = auth.currentUser?.uid
     if (userId != null) {
         LaunchedEffect(userId) {
@@ -130,58 +132,47 @@ private fun MainContent(recipeViewModel: RecipeViewModel, favoriteRecipeDao: Fav
     ) {
         Scaffold(
             topBar = {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(color = if (darkTheme) TopAppBarColorDark else TopAppBarColor)
-                        .height(60.dp)
-                        .padding(horizontal = 25.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "˗ˏˋ ★ ˎˊ˗",
-                        fontSize = 20.sp,
-                        color = if (darkTheme) TopBarTextColorDark else TopBarTextColor
+                TopBar(darkTheme = darkTheme)
+            },
+            bottomBar = {
+                if (currentRoute != Routes.LOGIN && currentRoute != Routes.SIGN_UP) {
+                    val bottomNavItems = listOf(
+                        BottomNavItem(Routes.MAIN, Icons.Filled.Home, "main/{category}", onClick = { onItemClick(Routes.MAIN) }),
+                        BottomNavItem(Routes.FAVORITE_SCREEN, Icons.Filled.Favorite, "favorites", onClick = { onItemClick(Routes.FAVORITE_SCREEN) }),
+                        BottomNavItem(Routes.CHAT_SCREEN, Icons.Filled.QuestionAnswer, "chat_screen", onClick = { onItemClick(Routes.CHAT_SCREEN) }),
+                        BottomNavItem(Routes.MAIN, Icons.Filled.Notifications, "main/{category}", onClick = { onItemClick(Routes.MAIN) }),
+                        BottomNavItem(Routes.PROFILE_SCREEN, Icons.Filled.Person2, "main/{category}", onClick = { onItemClick(Routes.PROFILE_SCREEN) })
                     )
+
+                    BottomBar(navController = navController, bottomNavItems = bottomNavItems, onItemClick = onItemClick)
                 }
             }
         ) { contentPadding ->
             Box(
                 modifier = Modifier
-                    .padding(top = 3.dp)
                     .fillMaxSize()
-            ) {
-                AppNavHost(navController = navController, recipeViewModel = recipeViewModel, favoriteRecipeDao = favoriteRecipeDao, imagePicker = imagePicker, paddingValues = contentPadding, uriState = uriState)
+                    .padding(contentPadding)
+            ){
+            AppNavHost(
+                navController = navController,
+                recipeViewModel = recipeViewModel,
+                favoriteRecipeDao = favoriteRecipeDao,
+                imagePicker = imagePicker,
+                paddingValues = contentPadding,
+                uriState = uriState
+            )
 
-                if (currentRoute == Routes.PROFILE_SCREEN) {
-                    ProfileCard(
-                        userEmail = auth.currentUser!!.email.toString(),
-                        username = userName,
-                        onLogout = {
-                            auth.signOut()
-                            navController.navigate(Routes.LOGIN)
-                        }
-                    )
-                }
-
-                // BottomBar her zaman ekranın altında sabit olacak şekilde
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                ) {
-                    if (currentRoute != Routes.LOGIN && currentRoute != Routes.SIGN_UP) {
-                        val bottomNavItems = listOf(
-                            BottomNavItem(Routes.MAIN, Icons.Filled.Home, "main/{category}", onClick = { onItemClick(Routes.MAIN) }),
-                            BottomNavItem(Routes.FAVORITE_SCREEN, Icons.Filled.Favorite, "favorites", onClick = { onItemClick(Routes.FAVORITE_SCREEN) }),
-                            BottomNavItem(Routes.CHAT_SCREEN, Icons.Filled.QuestionAnswer, "chat_screen", onClick = { onItemClick(Routes.CHAT_SCREEN) }),
-                            BottomNavItem(Routes.MAIN, Icons.Filled.Notifications, "main/{category}", onClick = { onItemClick(Routes.MAIN) }),
-                            BottomNavItem(Routes.PROFILE_SCREEN, Icons.Filled.Person2, "main/{category}", onClick = { onItemClick(Routes.PROFILE_SCREEN) })
-                        )
-
-                        BottomBar(navController = navController, bottomNavItems = bottomNavItems, onItemClick = onItemClick)
+            if (currentRoute == Routes.PROFILE_SCREEN) {
+                ProfileCard(
+                    userEmail = auth.currentUser!!.email.toString(),
+                    username = userName,
+                    onLogout = {
+                        auth.signOut()
+                        navController.navigate(Routes.LOGIN)
                     }
-                }
+                )
             }
+        }
         }
     }
 }

@@ -49,8 +49,6 @@ fun MainScreen(navController: NavController, favoriteRecipeDao: FavoriteRecipeDa
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        Spacer(modifier = Modifier.padding(2.dp))
-
         CategoryTabs(onCategorySelected = { category ->
             recipeViewModel.fetchRecipes(API_KEY, 500, category)
         })

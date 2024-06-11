@@ -40,7 +40,6 @@ fun FavoriteDetail(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Tarif detaylarını göster
             RecipeCardDetail(
                 title = recipe.title,
                 ingredients = recipe.ingredients,
@@ -51,7 +50,6 @@ fun FavoriteDetail(
             )
         }
     } ?: run {
-        // Eğer belirtilen recipeId'ye sahip bir tarif bulunamazsa uygun mesajı göster
         Text(
             text = "Recipe not found",
             modifier = Modifier.padding(16.dp),

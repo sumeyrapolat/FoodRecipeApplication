@@ -19,6 +19,7 @@
     import androidx.compose.material3.CircularProgressIndicator
     import androidx.compose.ui.draw.clip
     import androidx.compose.ui.graphics.Color
+    import androidx.compose.ui.text.font.FontWeight
     import androidx.compose.ui.text.style.TextAlign
     import androidx.compose.ui.unit.sp
     import com.example.foodrecipeapplicaiton.ui.view.components.FavoriteRecipeCard
@@ -42,16 +43,17 @@
             item {
                 Column(
                     modifier = Modifier.fillMaxWidth()
-                        .padding(3.dp)
                 ) {
                     Text(
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(start= 10.dp),
                         text = "Favorite Recipes",
-                        fontSize = 18.sp,
-                        textAlign = TextAlign.Center,
-                        color = Color.Black,
+                        fontSize = 22.sp,
                         maxLines = 1,
-                        modifier = Modifier.padding(vertical = 16.dp),
-                    )
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+
+                        )
                 }
             }
 
