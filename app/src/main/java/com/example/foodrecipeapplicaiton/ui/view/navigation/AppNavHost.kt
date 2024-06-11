@@ -19,14 +19,9 @@ import com.example.foodrecipeapplicaiton.ui.view.screens.FavoriteDetail
 import com.example.foodrecipeapplicaiton.ui.view.screens.FavoriteScreen
 import com.example.foodrecipeapplicaiton.ui.view.screens.LoginScreen
 import com.example.foodrecipeapplicaiton.ui.view.screens.MainScreen
-import com.example.foodrecipeapplicaiton.ui.view.screens.ProfileCard
 import com.example.foodrecipeapplicaiton.ui.view.screens.SignUpScreen
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
 @Composable
 fun AppNavHost(
@@ -62,29 +57,6 @@ fun AppNavHost(
                 uriState = uriState
             )
         }
-        composable(Routes.PROFILE_SCREEN) {
-            val auth = FirebaseAuth.getInstance()
-            val db = Firebase.firestore
-            val userId = auth.currentUser?.uid
-
-            val _userName = MutableStateFlow("")
-            val userName = _userName.asStateFlow()
-
-            if (userId != null) {
-                db.collection("users").document(userId).get()
-                    .addOnSuccessListener { document ->
-                        if (document != null && document.exists()) {
-                            _userName.value = document.getString("username") ?: "User"
-                            println("username is appnav host ${_userName.value}")
-                        }
-                    }
-                ProfileCard(
-                    userEmail = Firebase.auth.currentUser!!.email.toString(),
-                    username = userName.toString()
-                ) {
-                }
-            }
-        }
         composable("${Routes.DETAIL_SCREEN}/{recipeId}") { backStackEntry ->
             val recipeId = backStackEntry.arguments?.getString("recipeId")?.toIntOrNull()
             if (recipeId != null) {
@@ -110,8 +82,3 @@ fun AppNavHost(
         }
     }
 }
-
-
-
-
-
