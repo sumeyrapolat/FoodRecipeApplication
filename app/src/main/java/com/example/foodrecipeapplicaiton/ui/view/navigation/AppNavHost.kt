@@ -53,7 +53,6 @@ fun AppNavHost(
             ChatScreen(
                 navController = navController,
                 imagePicker = imagePicker,
-                paddingValues = paddingValues,
                 uriState = uriState
             )
         }

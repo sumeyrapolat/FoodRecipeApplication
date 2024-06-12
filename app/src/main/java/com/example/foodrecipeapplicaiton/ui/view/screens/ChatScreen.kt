@@ -72,7 +72,6 @@ import kotlinx.coroutines.flow.update
 @Composable
 fun ChatScreen(
     navController: NavController,
-    paddingValues: PaddingValues,
     imagePicker: ActivityResultLauncher<PickVisualMediaRequest>,
     uriState: MutableStateFlow<String>
 ) {
@@ -97,8 +96,7 @@ fun ChatScreen(
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(top = paddingValues.calculateTopPadding()),
+            .fillMaxSize(),
         verticalArrangement = Arrangement.Bottom
     ) {
         LazyColumn(
@@ -136,13 +134,12 @@ fun ChatScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 16.dp, start = 4.dp, end = 4.dp),
+                .padding(4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             TextField(
                 modifier = Modifier
-                    .weight(1f)
-                    .background(Color(android.graphics.Color.parseColor("#F691A9"))),
+                    .weight(1f),
                 value = chatState.prompt,
                 onValueChange = {
                     chatViewModel.onEvent(ChatUIEvent.UpdatePrompt(it))

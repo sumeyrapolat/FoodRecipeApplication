@@ -25,8 +25,9 @@ class ChatViewModel : ViewModel() {
     private val auth = FirebaseAuth.getInstance()
     private val db = Firebase.firestore
 
-    private val _userName = MutableStateFlow("")
+    private val _userName = MutableStateFlow("User")
     val userName = _userName.asStateFlow()
+
     init {
         fetchUserName()
     }
@@ -34,58 +35,44 @@ class ChatViewModel : ViewModel() {
     private fun fetchUserName() {
         val userId = auth.currentUser?.uid
         if (userId != null) {
-            viewModelScope.launch {
-                db.collection("users").document(userId).get()
-                    .addOnSuccessListener { document ->
-                        if (document != null && document.exists()) {
-                            _userName.value = document.getString("username") ?: "User"
-                            println("username is ${_userName.value}")
-
-                            // Kullanıcı adı alındıktan sonra Chat oluştur
-                            createInitialChat()
-                        }
+            db.collection("users").document(userId).get()
+                .addOnSuccessListener { document ->
+                    if (document != null && document.exists()) {
+                        _userName.value = document.getString("username") ?: "User"
+                        // After fetching the user's name, add the initial chat message
+                        createInitialChat()
+                    } else {
+                        // If user document does not exist, just create the initial chat
+                        createInitialChat()
                     }
-            }
+                }
+        } else {
+            // If user is not logged in, just create the initial chat
+            createInitialChat()
         }
     }
 
     private fun createInitialChat() {
+        val welcomeMessage = "Hello ${_userName.value}, I am your Food Assistant. How can I help you today? Are you looking for any specific recipes or places to eat?"
         _chatState.update { currentState ->
             currentState.copy(
                 chatList = currentState.chatList.toMutableList().apply {
-                    add(
-                        Chat(
-                            "Hello ${userName.value}, I am Your Food Assistant. Before we start, what is your name?",
-                            null,
-                            Date(),
-                            false
-                        )
-                    )
-                    println("your userName: ${userName.value}")
+                    add(Chat(welcomeMessage, null, Date(), false))
                 }
             )
         }
     }
-
 
     fun onEvent(event: ChatUIEvent) {
         when (event) {
             is ChatUIEvent.SendPrompt -> {
                 if (event.prompt.isNotEmpty()) {
                     addPrompt(event.prompt, event.bitmap)
-
-                    if (_chatState.value.isAwaitingName) {
-                        val name = event.prompt.split(" ").first()
-                        val responseMessage = "Hello! $name. I can converse in your preferred language. How may I help you today?"
-                        addResponse(responseMessage)
-                        _chatState.update { it.copy(isAwaitingName = false) }
+                    _chatState.update { it.copy(isAIResponding = true) }
+                    if (event.bitmap != null) {
+                        getResponseWithImage(event.prompt, event.bitmap)
                     } else {
-                        _chatState.update { it.copy(isAIResponding = true) }
-                        if (event.bitmap != null) {
-                            getResponseWithImage(event.prompt, event.bitmap)
-                        } else {
-                            getResponse(event.prompt)
-                        }
+                        getResponse(event.prompt)
                     }
                 }
             }

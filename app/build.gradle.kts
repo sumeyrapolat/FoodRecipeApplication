@@ -131,6 +131,12 @@ dependencies {
     //gemini api
     implementation(libs.gemini.api)
 
+    implementation (libs.accompanist.insets)
+
+    //work manager
+    implementation (libs.androidx.work.runtime.ktx)
+
+
 }
 
 kapt {
