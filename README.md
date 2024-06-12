@@ -9,6 +9,8 @@ Welcome to the Food Recipe Application repository! This application is designed 
 - **Save Favorites:** Mark recipes as favorites for quick access.
 - **Recipe Details:** View detailed information about each recipe, including ingredients, instructions, and nutritional information.
 - **User-Friendly Interface:** Easy-to-navigate UI for a seamless user experience.
+- **AI Chat:** Get personalized cooking tips and recipe recommendations through our integrated AI chat feature.
+
 
 ## Screenshots
 
