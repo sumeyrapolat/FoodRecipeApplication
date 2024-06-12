@@ -1,6 +1,12 @@
 package com.example.foodrecipeapplicaiton
 
+import UpdateRecipesWorker
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -21,15 +27,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
 import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.foodrecipeapplicaiton.ui.theme.FoodRecipeApplicaitonTheme
 import com.example.foodrecipeapplicaiton.viewmodel.RecipeViewModel
 import com.example.foodrecipeapplicaiton.room.FavoriteRecipeDao
@@ -39,23 +44,18 @@ import com.example.foodrecipeapplicaiton.ui.view.components.SideDrawerContent
 import com.example.foodrecipeapplicaiton.ui.view.components.TopBar
 import com.example.foodrecipeapplicaiton.ui.view.navigation.AppNavHost
 import com.example.foodrecipeapplicaiton.ui.view.routes.Routes
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    private lateinit var auth: FirebaseAuth
-    private lateinit var googleSignInClient: GoogleSignInClient
 
     @Inject
     lateinit var favoriteRecipeDao: FavoriteRecipeDao
@@ -63,27 +63,45 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        createNotificationChannel()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1)
+            }
+        }
+
+
         WindowCompat.setDecorFitsSystemWindows(window, false)  // Adjust window insets for Compose
 
-        auth = FirebaseAuth.getInstance()
-        googleSignInClient = GoogleSignIn.getClient(
-            this,
-            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build()
-        )
+        val workRequest = PeriodicWorkRequestBuilder<UpdateRecipesWorker>(1, TimeUnit.MINUTES)
+            .build()
 
-        val startDestination = Routes.MAIN
+        WorkManager.getInstance(this).enqueue(workRequest)
 
         setContent {
             FoodRecipeApplicaitonTheme(darkTheme = isSystemInDarkTheme()) {
                 val recipeViewModel: RecipeViewModel = hiltViewModel()
-                MainContentWithDrawer(recipeViewModel = recipeViewModel, favoriteRecipeDao = favoriteRecipeDao, startDestination = startDestination)
+                MainContentWithDrawer(recipeViewModel = recipeViewModel, favoriteRecipeDao = favoriteRecipeDao, startDestination = Routes.MAIN)
             }
         }
     }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "RecipeUpdateChannel"
+            val descriptionText = "Channel for recipe update notifications"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel("RECIPE_UPDATE_CHANNEL", name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
 }
+
+
 
 @Composable
 private fun MainContentWithDrawer(recipeViewModel: RecipeViewModel, favoriteRecipeDao: FavoriteRecipeDao, startDestination: String) {
@@ -91,7 +109,6 @@ private fun MainContentWithDrawer(recipeViewModel: RecipeViewModel, favoriteReci
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()

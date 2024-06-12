@@ -1,5 +1,6 @@
 package com.example.foodrecipeapplicaiton.ui.view.screens
 
+import UpdateRecipesWorker
 import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -28,7 +29,9 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import androidx.compose.ui.platform.LocalContext
-
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import java.util.concurrent.TimeUnit
 
 @Composable
 fun MainScreen(navController: NavController, favoriteRecipeDao: FavoriteRecipeDao) {
@@ -48,6 +51,13 @@ fun MainScreen(navController: NavController, favoriteRecipeDao: FavoriteRecipeDa
     if (isNetworkAvailable) {
         LaunchedEffect(Unit) {
             recipeViewModel.fetchRecipes(API_KEY, 500)
+        }
+
+        LaunchedEffect(Unit) {
+            val workRequest = PeriodicWorkRequestBuilder<UpdateRecipesWorker>(1, TimeUnit.DAYS)
+                .build()
+
+            WorkManager.getInstance(context).enqueue(workRequest)
         }
 
         LaunchedEffect(listState) {
@@ -120,7 +130,7 @@ fun MainScreen(navController: NavController, favoriteRecipeDao: FavoriteRecipeDa
                 }
             }
         }
-    } else  {
+    } else {
         LaunchedEffect(Unit) {
             recipeViewModel.fetchRecipes(API_KEY, 500)
         }
@@ -168,7 +178,6 @@ fun MainScreen(navController: NavController, favoriteRecipeDao: FavoriteRecipeDa
                             },
                             modifier = Modifier.padding(16.dp)
                         )
-
                     }
 
                     val displayedRecipes = recipes
