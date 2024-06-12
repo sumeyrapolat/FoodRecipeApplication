@@ -12,17 +12,29 @@ Welcome to the Food Recipe Application repository! This application is designed 
 
 ## Screenshots
 
-![Login](https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/login.png)
-![Signup](https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/signup.png)
-![Chat Screen](https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/chatscreen.png)
-![Favorite Screen](https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/favoritescreen.png)
-![Dairy Free](https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/dairyfree.png)
-![Gluten Free](https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/glutenfree.png)
-![Healthy](https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/healthy.png)
-![Popular](https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/popular.png)
-![Vegan](https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/vegan.png)
-![Vegetarian](https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/vegetarian.png)
-![Logout](https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/logout.png)
+<p float="left">
+  <img src="https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/login.png" width="45%" />
+  <img src="https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/signup.png" width="45%" />
+</p>
+<p float="left">
+  <img src="https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/chatscreen.png" width="45%" />
+  <img src="https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/favoritescreen.png" width="45%" />
+</p>
+<p float="left">
+  <img src="https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/dairyfree.png" width="45%" />
+  <img src="https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/glutenfree.png" width="45%" />
+</p>
+<p float="left">
+  <img src="https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/healthy.png" width="45%" />
+  <img src="https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/popular.png" width="45%" />
+</p>
+<p float="left">
+  <img src="https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/vegan.png" width="45%" />
+  <img src="https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/vegetarian.png" width="45%" />
+</p>
+<p float="left">
+  <img src="https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/logout.png" width="45%" />
+</p>
 
 ## Installation
 
