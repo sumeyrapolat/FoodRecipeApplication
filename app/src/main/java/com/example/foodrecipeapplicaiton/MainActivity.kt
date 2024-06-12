@@ -155,7 +155,7 @@ private fun MainContentWithDrawer(recipeViewModel: RecipeViewModel, favoriteReci
                             BottomNavItem(Routes.MAIN, Icons.Filled.Home, "main/{category}", onClick = { onItemClick(Routes.MAIN) }),
                             BottomNavItem(Routes.FAVORITE_SCREEN, Icons.Filled.Favorite, "favorites", onClick = { onItemClick(Routes.FAVORITE_SCREEN) }),
                             BottomNavItem(Routes.CHAT_SCREEN, Icons.Filled.QuestionAnswer, "chat_screen", onClick = { onItemClick(Routes.CHAT_SCREEN) }),
-                            BottomNavItem(Routes.MAIN, Icons.Filled.Notifications, "main/{category}", onClick = { onItemClick(Routes.MAIN) })
+                            BottomNavItem(Routes.NOTIFICATION_SCREEN, Icons.Filled.Notifications, "notification_screen", onClick = { onItemClick(Routes.NOTIFICATION_SCREEN) })
                         )
 
                         BottomBar(navController = navController, bottomNavItems = bottomNavItems, onItemClick = onItemClick)

@@ -6,6 +6,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,6 +21,7 @@ import com.example.foodrecipeapplicaiton.ui.view.screens.FavoriteDetail
 import com.example.foodrecipeapplicaiton.ui.view.screens.FavoriteScreen
 import com.example.foodrecipeapplicaiton.ui.view.screens.LoginScreen
 import com.example.foodrecipeapplicaiton.ui.view.screens.MainScreen
+import com.example.foodrecipeapplicaiton.ui.view.screens.NotificationScreeen
 import com.example.foodrecipeapplicaiton.ui.view.screens.SignUpScreen
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -57,6 +59,10 @@ fun AppNavHost(
                 imagePicker = imagePicker,
                 uriState = uriState
             )
+        }
+
+        composable(Routes.NOTIFICATION_SCREEN){
+            NotificationScreeen(navController = navController)
         }
         composable("${Routes.DETAIL_SCREEN}/{recipeId}") { backStackEntry ->
             val recipeId = backStackEntry.arguments?.getString("recipeId")?.toIntOrNull()

@@ -58,7 +58,7 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel = v
         ) {
             Image(
                 painter = painterResource(id =
-                if (darkTheme) R.drawable.darkicon else R.drawable.lighticon),
+                if (darkTheme) R.drawable.logodark else R.drawable.logolight),
                 contentDescription = "logo",
                 modifier = Modifier.size(220.dp)
             )

@@ -51,7 +51,7 @@ fun SignUpScreen(navController: NavController, signUpViewModel: SignUpViewModel 
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = if (darkTheme) R.drawable.darkicon else R.drawable.lighticon),
+                painter = painterResource(id = if (darkTheme) R.drawable.logodark else R.drawable.logolight),
                 contentDescription = "logo",
                 modifier = Modifier.size(220.dp)
             )
