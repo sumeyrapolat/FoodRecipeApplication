@@ -94,7 +94,7 @@ fun SignUpScreen(navController: NavController, signUpViewModel: SignUpViewModel 
                 .clickable {
                     navController.navigate(Routes.LOGIN)
                 },
-            text = "I Have Already an Account",
+            text = "I Already Have an Account",
             color = if (darkTheme) Color.White else Color.Black,
             fontSize = 16.sp,
             fontWeight = FontWeight.SemiBold,
