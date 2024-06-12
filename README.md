@@ -12,13 +12,12 @@ Welcome to the Food Recipe Application repository! This application is designed 
 
 ## Screenshots
 
-![Screenshot1](screenshots/login.png) ![Screenshot2](screenshots/signup.png)
-![Screenshot3](screenshots/chatscreen.png) ![Screenshot4](screenshots/favoritescreen.png)
-![Screenshot5](screenshots/dairyfree.png) ![Screenshot6](screenshots/glutenfree.png)
-![Screenshot7](screenshots/healthy.png) ![Screenshot8](screenshots/popular.png)
-![Screenshot9](screenshots/vegan.png) ![Screenshot10](screenshots/vegetarian.png)
-![Screenshot11](screenshots/logout.png) ![Screenshot12](screenshots/login.png)
-
+![Login](screenshots/login.png) ![Signup](screenshots/signup.png)
+![Chat Screen](screenshots/chatscreen.png) ![Favorite Screen](screenshots/favoritescreen.png)
+![Dairy Free](screenshots/dairyfree.png) ![Gluten Free](screenshots/glutenfree.png)
+![Healthy](screenshots/healthy.png) ![Popular](screenshots/popular.png)
+![Vegan](screenshots/vegan.png) ![Vegetarian](screenshots/vegetarian.png)
+![Logout](screenshots/logout.png)
 
 ## Installation
 
