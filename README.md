@@ -12,12 +12,17 @@ Welcome to the Food Recipe Application repository! This application is designed 
 
 ## Screenshots
 
-![Login](screenshots/login.png) ![Signup](screenshots/signup.png)
-![Chat Screen](screenshots/chatscreen.png) ![Favorite Screen](screenshots/favoritescreen.png)
-![Dairy Free](screenshots/dairyfree.png) ![Gluten Free](screenshots/glutenfree.png)
-![Healthy](screenshots/healthy.png) ![Popular](screenshots/popular.png)
-![Vegan](screenshots/vegan.png) ![Vegetarian](screenshots/vegetarian.png)
-![Logout](screenshots/logout.png)
+![Login](https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/login.png)
+![Signup](https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/signup.png)
+![Chat Screen](https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/chatscreen.png)
+![Favorite Screen](https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/favoritescreen.png)
+![Dairy Free](https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/dairyfree.png)
+![Gluten Free](https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/glutenfree.png)
+![Healthy](https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/healthy.png)
+![Popular](https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/popular.png)
+![Vegan](https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/vegan.png)
+![Vegetarian](https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/vegetarian.png)
+![Logout](https://github.com/sumeyrapolat/FoodRecipeApplication/blob/main/screenshots/logout.png)
 
 ## Installation
 
