@@ -13,7 +13,10 @@ Welcome to the Food Recipe Application repository! This application is designed 
 
 
 ## Screenshots
-
+<p float="left">
+  <img src="app/screenshots/permission.png" width="45%" />
+  <img src="app/screenshots/notification.png" width="45%" />
+</p>
 <p float="left">
   <img src="app/screenshots/login.png" width="45%" />
   <img src="app/screenshots/signup.png" width="45%" />
@@ -35,7 +38,8 @@ Welcome to the Food Recipe Application repository! This application is designed 
   <img src="app/screenshots/vegetarian.png" width="45%" />
 </p>
 <p float="left">
-  <img src="app/screenshots/logout.png" width="45%" />
+  <img src="app/screenshots/detail.png" width="45%" />
+   <img src="app/screenshots/logout.png" width="45%"
 </p>
 
 ## Installation
