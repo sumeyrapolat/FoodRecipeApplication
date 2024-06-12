@@ -88,15 +88,6 @@ fun SignUpScreen(navController: NavController, signUpViewModel: SignUpViewModel 
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            SignUpWithGoogle(onClicked = {
-                Log.i("google button", "clicked")
-            })
-        }
-
         Text(
             modifier = Modifier
                 .padding(20.dp)

@@ -1,5 +1,6 @@
 package com.example.foodrecipeapplicaiton.ui.view.navigation
 
+import android.content.Context
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
@@ -21,6 +22,7 @@ import com.example.foodrecipeapplicaiton.ui.view.screens.LoginScreen
 import com.example.foodrecipeapplicaiton.ui.view.screens.MainScreen
 import com.example.foodrecipeapplicaiton.ui.view.screens.SignUpScreen
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable

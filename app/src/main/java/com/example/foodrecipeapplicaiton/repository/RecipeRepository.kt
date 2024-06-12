@@ -3,9 +3,10 @@ package com.example.foodrecipeapplicaiton.repository
 import android.util.Log
 import com.example.foodrecipeapplicaiton.api.models.Recipe
 import com.example.foodrecipeapplicaiton.api.service.RecipeApiService
-import com.example.foodrecipeapplicaiton.room.AppDatabase
+import com.example.foodrecipeapplicaiton.room.FavoriteAppDatabase
 import com.example.foodrecipeapplicaiton.room.FavoriteRecipe
-import com.example.foodrecipeapplicaiton.room.FavoriteRecipeDao
+import com.example.foodrecipeapplicaiton.room.MainDao
+import com.example.foodrecipeapplicaiton.room.MainEntity
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -13,7 +14,9 @@ import javax.inject.Singleton
 @Singleton
 class RecipeRepository @Inject constructor(
     private val apiService: RecipeApiService,
-    private val database: AppDatabase
+    private val database: FavoriteAppDatabase,
+    private val mainDao: MainDao
+
 ) {
 
     suspend fun getRandomRecipes(apiKey: String, number: Int): List<Recipe> {
@@ -43,4 +46,32 @@ class RecipeRepository @Inject constructor(
     suspend fun removeFavoriteRecipe(recipe: FavoriteRecipe) {
         database.favoriteRecipeDao().deleteFavoriteRecipe(recipe)
     }
+
+    suspend fun getLocalRecipes(): List<MainEntity> {
+        return mainDao.getAllRecipes()
+    }
+
+    suspend fun saveRecipesToLocalDatabase(recipes: List<Recipe>) {
+        mainDao.insertRecipes(recipes.map { MainEntity.fromRecipe(it) })
+    }
+
+    suspend fun getRecipesByCategory(apiKey: String, number: Int, category: String): List<Recipe> {
+        val allRecipes = getRandomRecipes(apiKey, number)
+        val filteredRecipes = filterRecipesByCategory(allRecipes, category)
+        return filteredRecipes
+    }
+
+    private fun filterRecipesByCategory(recipes: List<Recipe>, category: String): List<Recipe> {
+        return when (category) {
+            "Popular" -> recipes.filter { it.veryPopular }
+            "Healthy" -> recipes.filter { it.veryHealthy }
+            "Vegetarian" -> recipes.filter { it.vegetarian }
+            "Gluten Free" -> recipes.filter { it.glutenFree }
+            "Vegan" -> recipes.filter { it.vegan }
+            "Dairy Free" -> recipes.filter { it.dairyFree }
+            else -> recipes
+        }
+    }
+
+
 }

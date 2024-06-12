@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.foodrecipeapplicaiton"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -108,8 +108,6 @@ dependencies {
 
     implementation (libs.androidx.room.runtime)
 
-
-
     implementation(libs.androidx.material.icons.extended)
 
 
@@ -135,6 +133,10 @@ dependencies {
 
     //work manager
     implementation (libs.androidx.work.runtime.ktx)
+
+    // Hilt WorkManager integration
+    implementation (libs.androidx.hilt.work)
+    kapt (libs.androidx.hilt.compiler)
 
 
 }

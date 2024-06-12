@@ -86,18 +86,7 @@ fun RecipeCardDetail(
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                Box(
-                    modifier = Modifier.padding(end = if (title.length > 30) 0.dp else 8.dp)
-                        .clickable {
-                            isFavorite = !isFavorite
-                        }
-                ) {
-                    Image(
-                        painter = painterResource(if (isFavorite) R.drawable.liked else R.drawable.like),
-                        contentDescription = "Favorite Icon",
-                        modifier = Modifier.size(30.dp)
-                    )
-                }
+
             }
 
             Spacer(modifier = Modifier.height(8.dp))

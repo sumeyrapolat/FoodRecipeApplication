@@ -42,3 +42,14 @@ data class Recipe(
     val veryPopular: Boolean,
     val weightWatcherSmartPoints: Int
 )
+fun Recipe.toSimpleRecipe(): SimpleRecipe {
+    return SimpleRecipe(
+        id = this.id,
+        title = this.title,
+        image = this.image,
+        extendedIngredients = this.extendedIngredients.map { it.name }, // Örnek bir dönüşüm, lütfen kendi gereksinimlerinize göre ayarlayın
+        instructions = this.instructions,
+        servings = this.servings,
+        readyInMinutes = this.readyInMinutes
+    )
+}
